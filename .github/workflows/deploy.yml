@@ -10,6 +10,7 @@ permissions:
   pages: write
   id-token: write
 
+# Never let two deploys race; a newer push always wins.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -18,14 +19,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+
+      # Vite 8 requires node >=20.19 or >=22.12. Pin 22 LTS.
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
+
       - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+
+      # Gate the deploy on correctness, not just "it compiled".
+      # `npm run build` already typechecks; this adds the crypto suite.
+      - name: Unit tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
 
@@ -37,4 +49,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
