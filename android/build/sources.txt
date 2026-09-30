@@ -1,0 +1,2 @@
+/Users/rajputnaresh/projects/khata/android/src/app/khata/app/MainActivity.java
+/Users/rajputnaresh/projects/khata/android/build/gen/khata/app/R.java

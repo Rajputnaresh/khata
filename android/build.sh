@@ -67,16 +67,21 @@ echo "==> 2/6  resources (aapt2 link)"
   -o "$BUILD/gen/base.apk"
 
 echo "==> 3/6  java"
+# Do NOT pass -bootclasspath/-source 17: javac 17 refuses --boot-classpath when
+# targeting 17, and the Android platform jar is a plain compile-time classpath
+# dependency here anyway (every used API predates minSdk 24). Just compile
+# against android.jar with a 17 target so lambdas and the service-worker client
+# work, and let d8 desugar down to API 24.
 find "$SRC" "$BUILD/gen" -name '*.java' > "$BUILD/sources.txt"
 javac -nowarn \
   -source 17 -target 17 \
-  -bootclasspath "$PLATFORM" \
   -classpath "$PLATFORM" \
   -d "$BUILD/classes" \
-  @"$BUILD/sources.txt" 2>&1 | grep -v 'bootstrap class path' || true
+  @"$BUILD/sources.txt"
 
 echo "==> 4/6  dex (d8)"
 find "$BUILD/classes" -name '*.class' > "$BUILD/classes.txt"
+[ -s "$BUILD/classes.txt" ] || { echo "no class files produced" >&2; exit 1; }
 "$BUILD_TOOLS/d8" \
   --lib "$PLATFORM" \
   --min-api 24 \
@@ -86,15 +91,9 @@ find "$BUILD/classes" -name '*.class' > "$BUILD/classes.txt"
 
 echo "==> 5/6  package"
 cp "$BUILD/gen/base.apk" "$APK"
-cd "$BUILD/dex"
-zip -q -X "$APK" classes.dex
-cd "$HERE"
-# A second classes.dex is not expected (one tiny Activity), but zip all of them
-# in case a future change pushes past the 64K method limit.
-for extra in "$BUILD"/dex/classes*.dex; do
-  [ -f "$extra" ] || continue
-  [ "$extra" = "$BUILD/dex/classes.dex" ] || (cd "$BUILD/dex" && zip -q -X "$APK" "$(basename "$extra")")
-done
+# Add every dex d8 produced (one today; more if a future change exceeds the
+# 64K method limit and d8 splits).
+(cd "$BUILD/dex" && zip -q -X "$APK" ./*.dex)
 
 echo "==> 6/6  align + sign"
 "$BUILD_TOOLS/zipalign" -p -f 4 "$APK" "$BUILD/aligned.apk"

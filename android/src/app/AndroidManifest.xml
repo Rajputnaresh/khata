@@ -17,7 +17,7 @@
         android:theme="@style/KhataTheme">
 
         <activity
-            android:name=".khata.app.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -27,18 +27,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <!-- The PWA manifest declares two shortcuts (add expense / add
-                 income) that open with ?action=expense / ?action=income. -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="rajputnaresh.github.io"
-                    android:pathPrefix="/khata/" />
             </intent-filter>
         </activity>
     </application>

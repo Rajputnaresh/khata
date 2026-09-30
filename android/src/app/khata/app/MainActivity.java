@@ -95,8 +95,11 @@ public class MainActivity extends Activity {
             s.setSafeBrowsingEnabled(false);
         }
 
+        // Service workers are permitted by default; the controller plus a client
+        // is what actually lets the Workbox SW serve the app with no network.
+        // There is no setAllowServiceWorker() on ServiceWorkerWebSettings
+        // (verified against android-35's android.jar) -- do not add one.
         ServiceWorkerController swc = ServiceWorkerController.getInstance();
-        swc.getServiceWorkerWebSettings().setAllowServiceWorker(true);
         swc.setServiceWorkerClient(new ServiceWorkerClient() {
             @Override
             public WebResourceResponse shouldInterceptRequest(WebResourceRequest request) {

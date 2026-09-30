@@ -195,6 +195,51 @@ hits floating-point drift; formatting to `₹1,234.56` happens only at render.
 
 ---
 
+## Glass Morphism
+
+`src/styles/glass.css` implements the material rather than applying a blur
+shortcut: a translucent fill, backdrop blur **with a saturation boost**, a 1px
+rim plus an inset top highlight, a large soft ambient shadow, and a fine noise
+layer to remove the plastic look. An animated ambient field sits behind
+everything — a blur over a flat colour is a no-op, so the panes would read as
+plain cards without something to refract.
+
+Rules the implementation obeys, each of which matters on a real phone:
+
+- **Never animate the blur radius.** It re-composites every frame and drops
+  phones to ~30fps. Entrances animate opacity and transform only.
+- **Glass stays on chrome and cards**, never on dense reading surfaces, where
+  blurred glyphs produce halos.
+- **The 1px rim is an accessibility requirement**, not decoration: Windows
+  forced-colors mode strips transparency, leaving only the border as the edge.
+- **Refraction is UA-gated in JS, never `@supports`.** Firefox parses `url()`
+  in `backdrop-filter` as valid and then renders nothing at all, so a feature
+  query cannot detect it.
+- `prefers-reduced-transparency`, `prefers-contrast` and `forced-colors` all
+  fall back to solid surfaces.
+
+```bash
+npm run test:glass   # 25 checks: glass invariants + category CRUD
+```
+
+The glass invariants are asserted as **computed styles**, not judged by eye:
+backdrop-filter present, `saturate()` present, translucent fill, rim, radius,
+ambient backdrop, and text contrast measured over the glass.
+
+---
+
+## Editing categories
+
+Settings → Categories gives full control: create, rename, recolour (palette or
+custom picker), change icon, set a **monthly cap**, reorder, archive, and
+delete. Each row shows how many entries it holds.
+
+Deleting a category **reassigns** its transactions to another one rather than
+orphaning them — a transaction with a missing `categoryId` would silently
+vanish from every rollup.
+
+---
+
 ## Tech
 
 Vite · React 19 · TypeScript · Tailwind CSS v4 · Dexie (IndexedDB) ·

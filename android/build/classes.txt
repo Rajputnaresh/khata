@@ -1,0 +1,8 @@
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/R.class
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/MainActivity.class
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/R$mipmap.class
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/MainActivity$2.class
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/R$style.class
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/R$string.class
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/MainActivity$1.class
+/Users/rajputnaresh/projects/khata/android/build/classes/khata/app/R$color.class

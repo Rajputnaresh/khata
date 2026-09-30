@@ -29,6 +29,10 @@ from PIL import Image
 REPO = Path(__file__).resolve().parent.parent.parent
 DEFAULT_SRC = REPO / "public" / "icons" / "icon-512.png"
 DEFAULT_OUT = REPO / "android" / "build" / "glyph"
+# NOTE: res/ lives next to AndroidManifest.xml, NOT under the java package dir.
+# aapt2 is given --dir src/app/res, so anything written elsewhere is silently
+# left out of the APK.
+DEFAULT_RES = REPO / "android" / "src" / "app" / "res"
 
 
 def segment_tile(src: np.ndarray) -> np.ndarray:
@@ -186,7 +190,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--src", type=Path, default=DEFAULT_SRC)
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
-    ap.add_argument("--res", type=Path, default=REPO / "android" / "src" / "app" / "khata" / "res")
+    ap.add_argument("--res", type=Path, default=DEFAULT_RES)
     ap.add_argument("--preview", action="store_true", help="write a side-by-side preview")
     args = ap.parse_args()
 
