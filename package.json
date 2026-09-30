@@ -1,0 +1,45 @@
+{
+  "name": "khata",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline-first personal budget tracker with insights and encrypted Google Drive backups.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "icons": "node scripts/make-icons.mjs",
+    "test": "node --test --experimental-strip-types tests/*.test.mjs",
+    "test:e2e": "node scripts/e2e.mjs",
+    "test:insights": "node scripts/e2e-insights.mjs",
+    "test:offline": "node scripts/e2e-offline.mjs",
+    "test:layout": "node scripts/e2e-layout.mjs"
+  },
+  "keywords": [
+    "budget",
+    "pwa",
+    "offline-first",
+    "indexeddb",
+    "personal-finance"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "playwright": "^1.61.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.1",
+    "vite-plugin-pwa": "^1.3.0"
+  },
+  "dependencies": {
+    "dexie": "^4.4.6",
+    "dexie-react-hooks": "^4.4.0",
+    "lucide-react": "^1.49.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}

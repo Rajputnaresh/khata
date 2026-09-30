@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en-IN" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5"
+    />
+    <title>Khata — Personal Budget</title>
+    <meta name="description" content="Offline-first personal budget tracker with insights and encrypted backups." />
+
+    <!-- iOS home-screen install (Apple doesn't use the standard manifest) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Khata" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+    <!-- Keep the OS UI in sync with the app theme -->
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14110F" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAF7F2" />
+
+    <script>
+      // Apply the saved theme before first paint so there is no flash.
+      ;(function () {
+        try {
+          var t = localStorage.getItem('khata.theme')
+          if (!t || t === 'system') {
+            t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+          }
+          var el = document.documentElement
+          el.classList.toggle('dark', t === 'dark')
+          el.style.colorScheme = t
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Khata needs JavaScript to run. It works fully offline once installed.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
