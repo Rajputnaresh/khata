@@ -14,7 +14,8 @@
     "test:e2e": "node scripts/e2e.mjs",
     "test:insights": "node scripts/e2e-insights.mjs",
     "test:offline": "node scripts/e2e-offline.mjs",
-    "test:layout": "node scripts/e2e-layout.mjs"
+    "test:layout": "node scripts/e2e-layout.mjs",
+    "test:live": "node scripts/e2e-live.mjs"
   },
   "keywords": [
     "budget",

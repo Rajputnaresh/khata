@@ -80,10 +80,17 @@ npm run test:e2e      # core flows: add, persist, tabs, crypto, service worker
 npm run test:insights # insight gating with thin vs. realistic data
 npm run test:offline  # boots and writes with the network fully off
 npm run test:layout   # no overlap, tap-target sizes, scroll clearance
+npm run test:live    # the deployed HTTPS URL: installability + offline
 ```
 
 The e2e scripts drive the real production build in headless Chromium, so run
 `npm run preview` first (or in another terminal).
+
+---
+
+### Live deployment
+<https://rajputnaresh.github.io/khata/> — deployed from `main` by
+`.github/workflows/deploy.yml` on every push.
 
 ---
 
