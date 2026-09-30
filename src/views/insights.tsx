@@ -105,7 +105,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
 
       {/* daily rhythm */}
       {a.totals.expense > 0 && (
-        <section className="card p-4">
+        <section className="glass glass-enter p-4">
           <div className="mb-1 text-[13.5px] font-bold">Daily rhythm</div>
           <div className="mb-3 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">
             Spending across the month in six buckets
@@ -116,7 +116,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
 
       {/* category deep dive */}
       {a.topCategories.length > 0 && (
-        <section className="card p-4">
+        <section className="glass glass-enter p-4">
           <div className="mb-3 flex items-center justify-between">
             <div className="text-[13.5px] font-bold">Category breakdown</div>
             <span className="tnum text-[11px] text-[var(--md-sys-color-on-surface-variant)]">
@@ -133,25 +133,25 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
       )}
 
       {/* year view */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-3 text-[13.5px] font-bold">Last 12 months</div>
         <MonthColumns data={trend} currency={cur} />
       </section>
 
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-1 text-[13.5px] font-bold">Spending trajectory</div>
         <div className="mb-3 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Smoothed 12-month expense line</div>
         <AreaTrend data={trend} currency={cur} height={130} />
       </section>
 
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-1 text-[13.5px] font-bold">Income trajectory</div>
         <div className="mb-3 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Smoothed 12-month income line</div>
         <AreaTrend data={incomeTrend} currency={cur} height={130} />
       </section>
 
       {/* all insights */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-[13.5px] font-bold">
             <Brain size={15} style={{ color: 'var(--md-sys-color-primary)' }} />
@@ -188,7 +188,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
       </section>
 
       {a.anomalies.length > 0 && (
-        <section className="card p-4">
+        <section className="glass glass-enter p-4">
           <div className="mb-2.5 flex items-center gap-1.5 text-[13.5px] font-bold">
             <AlertTriangle size={15} style={{ color: 'var(--tone-warn)' }} />
             Spikes to review

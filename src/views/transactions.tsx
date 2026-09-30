@@ -144,7 +144,7 @@ export function Transactions({
         />
         <button
           onClick={() => setSort((s) => (s === 'recent' ? 'largest' : 'recent'))}
-          className="chip ml-auto text-[11px] text-[var(--md-sys-color-on-surface-variant)]"
+          className="glass-chip ml-auto text-[11px] text-[var(--md-sys-color-on-surface-variant)]"
         >
           <Filter size={11} />
           {sort === 'recent' ? 'Recent' : 'Largest'}
@@ -180,7 +180,7 @@ export function Transactions({
                   {money(Math.abs(dayTotal(list)), settings.currency, 0)}
                 </span>
               </div>
-              <div className="card overflow-hidden">
+              <div className="glass glass-enter overflow-hidden">
                 {list.map((t, i) => (
                   <TxRow key={t.id} tx={t} cat={map.get(t.categoryId)} currency={settings.currency} onClick={() => onOpen(t)} last={i === list.length - 1} />
                 ))}

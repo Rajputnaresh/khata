@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- No ActionBar: the PWA draws its own header, and a system bar on top of
+         it would push the app's layout down and break its safe-area insets. -->
+    <style name="KhataTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/khata_surface_light</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

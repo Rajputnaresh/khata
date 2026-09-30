@@ -80,7 +80,7 @@ export function Dashboard({
       </div>
 
       {/* hero */}
-      <section className="card relative overflow-hidden p-5">
+      <section className="glass glass-enter relative overflow-hidden p-5">
         <div
           className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full opacity-[0.13] blur-2xl"
           style={{ background: 'var(--md-sys-color-primary)' }}
@@ -133,7 +133,7 @@ export function Dashboard({
 
       {/* budget */}
       {a.budget > 0 && (
-        <section className="card flex items-center gap-4 p-4">
+        <section className="glass glass-enter flex items-center gap-4 p-4">
           <BudgetRing used={a.budgetUsed} projected={a.budget > 0 ? a.projected / a.budget : 0} currency={cur} />
           <div className="min-w-0 flex-1">
             <div className="label mb-1">Budget</div>
@@ -186,7 +186,7 @@ export function Dashboard({
       </div>
 
       {/* 12-month trend */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-3 flex items-center justify-between">
           <div>
             <div className="text-[13.5px] font-bold">12-month spending</div>
@@ -205,7 +205,7 @@ export function Dashboard({
 
       {/* category donut */}
       {a.topCategories.length > 0 && (
-        <section className="card p-4">
+        <section className="glass glass-enter p-4">
           <div className="mb-3 text-[13.5px] font-bold">Where it went</div>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             <Donut
@@ -226,7 +226,7 @@ export function Dashboard({
       )}
 
       {/* insights */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-3 flex items-center justify-between">
           <div className="text-[13.5px] font-bold">Insights</div>
           {a.insights.length > 3 && (
@@ -265,7 +265,7 @@ export function Dashboard({
       </div>
 
       {/* recent */}
-      <section className="card overflow-hidden p-4">
+      <section className="glass glass-enter overflow-hidden p-4">
         <div className="mb-2.5 flex items-center justify-between">
           <div className="text-[13.5px] font-bold">Recent activity</div>
           <button onClick={onOpenInsights} className="text-[11.5px] font-bold text-[var(--md-sys-color-primary)]">
@@ -300,7 +300,7 @@ function MiniStat({
           ? 'var(--tone-warn)'
           : 'var(--md-sys-color-on-surface)'
   return (
-    <div className="card p-3">
+    <div className="glass glass-sm glass-enter p-3">
       <div className="mb-1 flex items-center gap-1.5" style={{ color: 'var(--md-sys-color-on-surface-variant)' }}>
         {icon}
         <span className="label">{label}</span>

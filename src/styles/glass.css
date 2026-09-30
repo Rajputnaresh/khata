@@ -1,0 +1,483 @@
+/* ==========================================================================
+   Glass — a real glass material, not a blur shortcut.
+
+   The physics of a glass pane, as CSS:
+     1. a translucent fill,
+     2. refraction (backdrop blur) + a saturation boost, because blur alone
+        averages hues together and desaturates the backdrop,
+     3. a bright rim: a 1px border plus an inset top highlight, which is what
+        separates a "pane" from a "translucent div",
+     4. a large, soft, low-opacity ambient shadow to lift it off the page.
+
+   Hard rules this file obeys, each learned the hard way:
+     - Never animate the blur radius. It forces a full re-composite every
+       frame and drops phones to ~30fps. Animate transform/opacity instead.
+     - Never stack glass three deep. Each layer is its own compositing cost.
+     - Keep glass on chrome and cards, not on dense reading surfaces, where
+       blurred glyphs produce halos and contrast becomes un-certifiable.
+     - The 1px rim is an accessibility requirement, not decoration: Windows
+       forced-colors mode strips transparency, leaving the border as the only
+       visible edge of the pane.
+     - Refraction via SVG displacement maps is Chromium-only and cannot be
+       feature-detected (Firefox parses url() in backdrop-filter as valid, then
+       renders nothing), so it is applied by a JS UA gate, never by @supports.
+   ========================================================================== */
+
+:root {
+  --glass-blur: 20px;
+  --glass-blur-sm: 12px;
+  --glass-blur-lg: 28px;
+  --glass-saturate: 175%;
+
+  /* Fills.
+     Light mode needs a LOWER fill than the classic 12% recipe suggests,
+     because the M3 light surface is already near-white: a high fill just
+     reads as a flat card with a shadow and the ambient orbs never show
+     through. Keeping it low is what makes the pane read as glass. Dark mode
+     can carry a higher fill, because there the glass fill is what supplies
+     the luminosity the blur needs. */
+  --glass-fill: rgb(255 255 255 / 0.34);
+  --glass-fill-strong: rgb(255 255 255 / 0.5);
+  --glass-fill-subtle: rgb(255 255 255 / 0.2);
+  --glass-fill-hover: rgb(255 255 255 / 0.46);
+
+  --glass-rim: rgb(255 255 255 / 0.7);
+  --glass-rim-strong: rgb(255 255 255 / 0.92);
+  --glass-rim-soft: rgb(255 255 255 / 0.4);
+
+  --glass-specular: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 -1px 0 rgb(255 255 255 / 0.35);
+
+  --glass-shadow: 0 8px 32px rgb(60 40 30 / 0.1), 0 2px 8px rgb(60 40 30 / 0.05);
+  --glass-shadow-lg: 0 20px 56px rgb(60 40 30 / 0.14), 0 4px 12px rgb(60 40 30 / 0.06);
+  --glass-shadow-sm: 0 2px 10px rgb(60 40 30 / 0.07);
+
+  --glass-radius: 1.375rem;
+  --glass-radius-sm: 0.875rem;
+  --glass-radius-lg: 1.75rem;
+  --glass-radius-xl: 2.25rem;
+
+  --glass-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.dark {
+  --glass-fill: rgb(255 255 255 / 0.1);
+  --glass-fill-strong: rgb(255 255 255 / 0.16);
+  --glass-fill-subtle: rgb(255 255 255 / 0.055);
+  --glass-fill-hover: rgb(255 255 255 / 0.19);
+
+  --glass-rim: rgb(255 255 255 / 0.18);
+  --glass-rim-strong: rgb(255 255 255 / 0.36);
+  --glass-rim-soft: rgb(255 255 255 / 0.09);
+
+  --glass-specular: inset 0 1px 0 rgb(255 255 255 / 0.22), inset 0 -1px 0 rgb(255 255 255 / 0.05);
+
+  --glass-shadow: 0 8px 32px rgb(0 0 0 / 0.44), 0 2px 8px rgb(0 0 0 / 0.3);
+  --glass-shadow-lg: 0 24px 64px rgb(0 0 0 / 0.6), 0 4px 14px rgb(0 0 0 / 0.4);
+  --glass-shadow-sm: 0 2px 10px rgb(0 0 0 / 0.32);
+}
+
+/* --------------------------------------------------------------------------
+   Ambient backdrop
+   Glass needs something to blur. Over a flat colour, a blur is a no-op and the
+   pane reads as a grey smudge. These orbs are positioned partly off-canvas so
+   you see the edge of a glow rather than a visible circle, and they are fixed
+   so the glass still has colour to work with deep into the page.
+   -------------------------------------------------------------------------- */
+
+body {
+  background-color: var(--md-sys-color-surface);
+}
+
+.glass-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--md-sys-color-surface);
+}
+
+.glass-backdrop::before,
+.glass-backdrop::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(0.5px);
+  will-change: transform;
+}
+
+.glass-backdrop::before {
+  width: 34rem;
+  height: 34rem;
+  top: -12rem;
+  right: -10rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--md-sys-color-primary) 55%, transparent) 0%, transparent 68%);
+}
+
+.glass-backdrop::after {
+  width: 30rem;
+  height: 30rem;
+  bottom: -8rem;
+  left: -9rem;
+  background: radial-gradient(circle, color-mix(in oklab, var(--md-sys-color-tertiary) 45%, transparent) 0%, transparent 68%);
+}
+
+/* A third, central wash stops the page reading as flat paper in light mode —
+   without it the panes have nothing to refract and look like plain cards. */
+.glass-backdrop__wash {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 120% 70% at 50% 0%,
+    color-mix(in oklab, var(--md-sys-color-primary) 9%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+.dark .glass-backdrop::after {
+  width: 26rem;
+  height: 26rem;
+  top: 38%;
+  bottom: auto;
+  background: radial-gradient(circle, color-mix(in oklab, var(--md-sys-color-primary) 26%, transparent) 0%, transparent 66%);
+}
+
+/* A slow drift, animated with transform only — never the blur. */
+@keyframes glass-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2.5rem, 2rem, 0) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .glass-backdrop::before {
+    animation: glass-drift 34s var(--md-sys-motion-easing-standard) infinite;
+  }
+  .glass-backdrop::after {
+    animation: glass-drift 44s var(--md-sys-motion-easing-standard) infinite reverse;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   The pane
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .glass {
+    position: relative;
+    isolation: isolate;
+    background: var(--glass-fill);
+    border: 1px solid var(--glass-rim);
+    border-radius: var(--glass-radius);
+    box-shadow: var(--glass-shadow), var(--glass-specular);
+    transition:
+      background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+      box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+      border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+      transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+  }
+
+  /* Rung 2: real frost. Both the prefixed and unprefixed property. */
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass {
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    }
+  }
+
+  /* Rung 3: refraction via an SVG displacement map.
+     Chromium-only. Applied by a class that JS adds after a UA check, because
+     @supports reports true in Firefox for url() filters that then render
+     nothing at all. */
+  .glass-refract {
+    -webkit-backdrop-filter: blur(2px) saturate(180%) url(#glass-lens);
+    backdrop-filter: blur(2px) saturate(180%) url(#glass-lens);
+  }
+
+  /* A fine noise layer kills the sterile plastic look. Implemented with a
+     pseudo-element rather than a background-image so it can overlay-blend
+     with whatever is behind the pane. */
+  .glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: var(--glass-noise);
+    background-size: 140px 140px;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .glass-strong {
+    --glass-fill: var(--glass-fill-strong);
+    box-shadow: var(--glass-shadow-lg), var(--glass-specular);
+  }
+
+  .glass-subtle {
+    --glass-fill: var(--glass-fill-subtle);
+    --glass-blur: var(--glass-blur-sm);
+    box-shadow: var(--glass-shadow-sm), var(--glass-specular);
+  }
+
+  .glass-sm {
+    --glass-radius: var(--glass-radius-sm);
+    --glass-blur: var(--glass-blur-sm);
+    --glass-fill: var(--glass-fill-subtle);
+    box-shadow: var(--glass-shadow-sm), var(--glass-specular);
+  }
+
+  .glass-lg {
+    --glass-radius: var(--glass-radius-lg);
+    --glass-blur: var(--glass-blur-lg);
+    box-shadow: var(--glass-shadow-lg), var(--glass-specular);
+  }
+
+  .glass-xl {
+    --glass-radius: var(--glass-radius-xl);
+  }
+
+  .glass-float {
+    box-shadow: var(--glass-shadow-lg), var(--glass-specular);
+  }
+
+  /* Interactive glass: the state layer is a real specular wash, not a flat
+     grey overlay, so hover reads as light moving across the pane. */
+  .glass-interactive {
+    cursor: pointer;
+  }
+  .glass-interactive:hover {
+    background: var(--glass-fill-hover);
+    border-color: var(--glass-rim-strong);
+  }
+  .glass-interactive:active {
+    transform: scale(0.985);
+  }
+
+  /* Glass chip / pill. */
+  .glass-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 2rem;
+    padding-inline: 0.875rem;
+    border-radius: var(--glass-radius-full, 62.5rem);
+    background: var(--glass-fill-subtle);
+    border: 1px solid var(--glass-rim-soft);
+    box-shadow: var(--glass-specular);
+    font-size: var(--md-sys-typescale-label-lg-size);
+    font-weight: var(--md-sys-typescale-label-lg-weight);
+    color: var(--md-sys-color-on-surface-variant);
+    cursor: pointer;
+    transition:
+      background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+      color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+      border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  }
+  .glass-chip[aria-pressed='true'],
+  .glass-chip[data-selected='true'] {
+    background: color-mix(in oklab, var(--md-sys-color-primary) 26%, var(--glass-fill-strong));
+    border-color: var(--glass-rim-strong);
+    color: var(--md-sys-color-on-primary-container);
+  }
+
+  /* Full-bleed glass bar for the top app bar / bottom nav. */
+  .glass-bar {
+    position: relative;
+    background: var(--glass-fill-subtle);
+    border-bottom: 1px solid var(--glass-rim-soft);
+    box-shadow: var(--glass-shadow-sm);
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-bar {
+      -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
+      backdrop-filter: blur(var(--glass-blur-lg)) saturate(180%);
+    }
+  }
+
+  /* Scrim behind a modal. Blur is a quarter of the card's on purpose: at full
+     viewport size the scrim does the visual work and the blur is only a hint. */
+  .glass-scrim {
+    background: color-mix(in oklab, var(--md-sys-color-scrim) 55%, transparent);
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-scrim {
+      -webkit-backdrop-filter: blur(4px) saturate(120%);
+      backdrop-filter: blur(4px) saturate(120%);
+    }
+  }
+
+  /* Text field: a glass trough. */
+  .glass-field {
+    width: 100%;
+    background: var(--glass-fill-subtle);
+    border: 1px solid var(--glass-rim-soft);
+    border-radius: var(--glass-radius-sm);
+    padding: 0.8rem 0.95rem;
+    color: var(--md-sys-color-on-surface);
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.06), var(--glass-specular);
+    transition:
+      border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+      background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+  }
+  .glass-field::placeholder {
+    color: var(--md-sys-color-on-surface-variant);
+    opacity: 0.65;
+  }
+  .glass-field:focus {
+    outline: none;
+    border-color: var(--md-sys-color-primary);
+    background: var(--glass-fill);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--md-sys-color-primary) 28%, transparent),
+      var(--glass-specular);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Fallbacks and user preferences
+   These are not optional. Glass without them is an accessibility regression,
+   not a style choice.
+   -------------------------------------------------------------------------- */
+
+/* Rung 1 fallback: no backdrop-filter at all. Go near-opaque so text stays
+   readable instead of floating on the raw backdrop. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-strong,
+  .glass-subtle,
+  .glass-sm,
+  .glass-lg,
+  .glass-chip,
+  .glass-bar {
+    background: color-mix(in oklab, var(--md-sys-color-surface) 94%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .glass-field {
+    background: color-mix(in oklab, var(--md-sys-color-surface) 96%, transparent);
+  }
+}
+
+/* iOS Reduce Transparency. */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-strong,
+  .glass-subtle,
+  .glass-sm,
+  .glass-lg,
+  .glass-chip,
+  .glass-bar {
+    background: var(--md-sys-color-surface) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .glass::before {
+    display: none;
+  }
+}
+
+/* Windows high-contrast / forced colors: transparency is stripped, so the rim
+   becomes the only visible edge. Make it explicit and thick enough to see. */
+@media (forced-colors: active) {
+  .glass,
+  .glass-strong,
+  .glass-subtle,
+  .glass-sm,
+  .glass-lg,
+  .glass-chip,
+  .glass-bar,
+  .glass-field {
+    border: 2px solid CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .glass::before {
+    display: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .glass {
+    --glass-fill: color-mix(in oklab, var(--md-sys-color-surface) 88%, transparent);
+    --glass-rim: color-mix(in oklab, var(--md-sys-color-on-surface) 55%, transparent);
+  }
+  .glass-field {
+    border-color: var(--md-sys-color-on-surface);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Entrance
+   Opacity and transform only — animating a filter would repaint the whole
+   blurred region every frame.
+   -------------------------------------------------------------------------- */
+
+@keyframes glass-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.glass-enter {
+  animation: glass-enter var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-backdrop::before,
+  .glass-backdrop::after {
+    animation: none;
+  }
+  .glass-enter {
+    animation-duration: 0.01ms;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Navigation bar item
+   The active destination reads as a glass pill, the inactive ones as plain
+   text — the Material 3 "pill for the selected destination" pattern, rendered
+   in glass.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .nav-item {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    min-height: 3.25rem;
+    padding-inline: 0.25rem;
+    border-radius: 62.5rem;
+    color: var(--md-sys-color-on-surface-variant);
+    transition:
+      color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+      background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+    cursor: pointer;
+  }
+
+  .nav-item[aria-current='page'] {
+    color: var(--md-sys-color-on-primary-container);
+    background: color-mix(in oklab, var(--md-sys-color-primary) 30%, var(--glass-fill-strong));
+    border: 1px solid var(--glass-rim);
+    box-shadow: var(--glass-specular);
+  }
+
+  .nav-item:not([aria-current='page']):hover {
+    background: var(--glass-fill-subtle);
+  }
+}

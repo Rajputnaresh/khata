@@ -43,7 +43,7 @@ export function ToastHost({ children }: { children: ReactNode }) {
         {items.map((t) => (
           <div
             key={t.id}
-            className="anim-pop pointer-events-auto flex max-w-md items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 text-[13px] font-medium shadow-[var(--md-sys-elevation-level3)]"
+            className="anim-pop glass glass-strong pointer-events-auto flex max-w-md items-center gap-2.5 px-3.5 py-2.5 text-[13px] font-medium"
             style={{
               background: 'var(--md-sys-color-surface-container-low)',
               borderColor: t.tone === 'err' ? 'color-mix(in oklab, var(--tone-bad) 45%, var(--md-sys-color-outline-variant))' : 'var(--md-sys-color-outline-variant)',
@@ -118,28 +118,28 @@ export function Sheet({
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal="true">
       <button
-        className="anim-fade absolute inset-0 bg-black/45 backdrop-blur-[2px]"
+        className="anim-fade glass-scrim absolute inset-0"
         onClick={onClose}
         aria-label="Close"
       />
       <div
-        className="anim-sheet safe-b relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-low)] shadow-[var(--md-sys-elevation-level3)] sm:max-w-lg sm:rounded-3xl"
+        className="anim-sheet glass glass-strong safe-b relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl sm:max-w-lg sm:rounded-3xl"
       >
-        <div className="flex items-center justify-between gap-3 border-b border-[var(--md-sys-color-outline-variant)] px-4 py-3.5">
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--glass-rim-soft)] px-4 py-3.5">
           <div className="flex items-center gap-2.5">
             <span className="h-1 w-8 rounded-full bg-[var(--md-sys-color-outline)] sm:hidden" />
             <h2 className="text-[15px] font-bold tracking-tight">{title}</h2>
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--md-sys-color-surface-container-highest)] transition hover:brightness-110"
+            className="glass-chip flex h-8 w-8 items-center justify-center rounded-full transition hover:brightness-110"
             aria-label="Close"
           >
             <X size={16} />
           </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">{children}</div>
-        {footer && <div className="border-t border-[var(--md-sys-color-outline-variant)] px-4 py-3">{footer}</div>}
+        {footer && <div className="border-t border-[var(--glass-rim-soft)] px-4 py-3">{footer}</div>}
       </div>
     </div>
   )
@@ -198,7 +198,7 @@ export function SegmentedControl<T extends string>({
 }) {
   return (
     <div
-      className="inline-flex rounded-xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-highest)] p-0.5"
+      className="glass-sm inline-flex rounded-xl p-0.5"
       role="tablist"
     >
       {options.map((o) => {
@@ -269,7 +269,7 @@ export function StatTile({
           ? 'var(--tone-warn)'
           : 'var(--md-sys-color-on-surface)'
   return (
-    <div className="card p-3.5">
+    <div className="glass glass-sm glass-enter p-3.5">
       <div className="mb-1.5 flex items-center gap-1.5">
         {icon && <span style={{ color: 'var(--md-sys-color-on-surface-variant)' }}>{icon}</span>}
         <span className="label">{label}</span>

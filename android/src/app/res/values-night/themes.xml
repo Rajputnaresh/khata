@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark-mode variant of the launch theme, so the splash window matches the
+     app's own dark surface instead of flashing white on a dark device. -->
+<resources>
+    <style name="KhataTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/khata_surface_dark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

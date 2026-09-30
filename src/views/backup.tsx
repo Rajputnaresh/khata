@@ -263,7 +263,7 @@ export function BackupView() {
   return (
     <div className="space-y-4">
       {/* status hero */}
-      <section className="card p-5">
+      <section className="glass glass-lg glass-enter p-5">
         <div className="flex items-start gap-3">
           <div
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl"
@@ -291,7 +291,7 @@ export function BackupView() {
       </section>
 
       {/* how it works */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-3 flex items-center gap-1.5 text-[13px] font-bold">
           <ShieldCheck size={15} style={{ color: 'var(--tone-good)' }} />
           How your backup stays private
@@ -318,14 +318,14 @@ export function BackupView() {
 
       {/* connect flow */}
       {!connected && (
-        <section className="card space-y-3 p-4">
+        <section className="glass glass-enter space-y-3 p-4">
           <div className="text-[13.5px] font-bold">One-time setup</div>
           <p className="text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
             Khata needs a Google OAuth <em>client ID</em> to use Drive. Create a free project in Google
             Cloud, enable the Drive API, then paste the client ID below. Full steps are in the README.
           </p>
           <input
-            className="field font-mono text-[12px]"
+            className="glass-field font-mono text-[12px]"
             value={clientId}
             onChange={(e) => setClientId(e.target.value)}
             placeholder="1234567890-abc.apps.googleusercontent.com"
@@ -344,7 +344,7 @@ export function BackupView() {
       {/* connected controls */}
       {connected && (
         <>
-          <section className="card space-y-3 p-4">
+          <section className="glass glass-enter space-y-3 p-4">
             <div>
               <div className="mb-1.5 flex items-center justify-between">
                 <label className="label" htmlFor="pp">
@@ -361,7 +361,7 @@ export function BackupView() {
                 <input
                   id="pp"
                   type={showPass ? 'text' : 'password'}
-                  className="field pr-10"
+                  className="glass-field pr-10"
                   value={passphrase}
                   onChange={(e) => rememberPass(e.target.value)}
                   placeholder="At least 6 characters"
@@ -418,7 +418,7 @@ export function BackupView() {
           </section>
 
           {/* backup list */}
-          <section className="card p-4">
+          <section className="glass glass-enter p-4">
             <div className="mb-3 flex items-center justify-between">
               <div className="text-[13.5px] font-bold">Snapshots ({backups.length})</div>
               <button onClick={refresh} className="text-[11.5px] font-bold text-[var(--md-sys-color-primary)]">
@@ -473,7 +473,7 @@ export function BackupView() {
       )}
 
       {/* local export/import — always available */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-1 text-[13.5px] font-bold">Move data in and out</div>
         <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           CSV is plain text — open it in any spreadsheet, or use it to load history from another app.
@@ -499,7 +499,7 @@ export function BackupView() {
       </section>
 
       {/* danger */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-1 text-[13.5px] font-bold">Erase everything</div>
         <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           Removes all transactions, categories and settings from this device. Backups in Drive are not

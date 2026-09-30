@@ -7,6 +7,8 @@ import { Transactions } from './views/transactions'
 import { InsightsView } from './views/insights'
 import { BackupView } from './views/backup'
 import { TxEditor } from './components/tx-editor'
+import { GlassLens, useGlassRefraction } from './components/glass-lens'
+import { CategoryManager } from './components/category-manager'
 import { Sheet, ToastHost, haptic, useToast } from './components/ui'
 import { useCategories, useSettings, useTheme, updateSettings } from './lib/store'
 import { ensureSeed } from './lib/db'
@@ -36,6 +38,7 @@ function App() {
   const { categories } = useCategories()
   const settings = useSettings()
   useTheme()
+  useGlassRefraction()
 
   useEffect(() => {
     ensureSeed()
@@ -93,8 +96,14 @@ function App() {
 
   return (
     <div className="min-h-dvh">
-      {/* top app bar — Material 3 small top app bar */}
-      <header className="safe-t sticky top-0 z-30 bg-surface shadow-[var(--md-sys-elevation-level1)]">
+      {/* Ambient field for the glass to refract. Fixed so there is still colour
+          behind the panes deep into a long scroll. */}
+      <div className="glass-backdrop" aria-hidden="true" />
+      <div className="glass-backdrop__wash" aria-hidden="true" />
+      <GlassLens />
+
+      {/* top app bar — glass */}
+      <header className="safe-t glass-bar sticky top-0 z-30">
         <div className="safe-x mx-auto flex max-w-3xl items-center justify-between px-4 py-2">
           <div className="flex items-center gap-2.5">
             <img
@@ -144,8 +153,8 @@ function App() {
         )}
       </main>
 
-      {/* bottom nav — Material 3 navigation bar with pill-shaped active item */}
-      <nav className="safe-b fixed inset-x-0 bottom-0 z-30 border-t border-outline-variant bg-surface-container shadow-[var(--md-sys-elevation-level2)]">
+      {/* bottom nav — glass navigation bar with a pill-shaped active item */}
+      <nav className="safe-b glass-bar fixed inset-x-0 bottom-0 z-30 border-t border-[var(--glass-rim-soft)]">
         <div className="safe-x mx-auto flex max-w-3xl items-center gap-1 px-2 py-1.5">
           {TABS.map((t) => {
             const on = tab === t.id
@@ -154,7 +163,7 @@ function App() {
               <button
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className="nav-item"
+                className="nav-item glass-nav"
                 aria-current={on ? 'page' : undefined}
                 aria-label={t.label}
               >
@@ -169,8 +178,12 @@ function App() {
       {/* FAB — Material 3 floating action button */}
       <button
         onClick={() => setAddOpen(true)}
-        className="safe-b fixed bottom-[calc(env(safe-area-inset-bottom)+5.25rem)] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container shadow-[var(--md-sys-elevation-level3)] transition-transform active:scale-90 sm:hidden"
-        style={{ borderRadius: 'var(--radius-lg)' }}
+        className="safe-b glass glass-float glass-enter fixed bottom-[calc(env(safe-area-inset-bottom)+5.25rem)] right-4 z-30 flex h-14 w-14 items-center justify-center text-on-primary-container transition-transform active:scale-90 sm:hidden"
+        style={{
+          borderRadius: 'var(--glass-radius-lg)',
+          background: 'color-mix(in oklab, var(--md-sys-color-primary) 78%, transparent)',
+          borderColor: 'var(--glass-rim-strong)',
+        }}
         aria-label="Add transaction"
       >
         <Plus size={26} strokeWidth={2.4} />
@@ -223,14 +236,12 @@ function App() {
 /* ---------------- settings ---------------- */
 
 function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
-  const { categories } = useCategories()
   const settings = useSettings()
   const { mode, pref } = useTheme()
   const { push } = useToast()
   const [budgetDraft, setBudgetDraft] = useState(() =>
     settings.overallMonthlyLimit > 0 ? (settings.overallMonthlyLimit / 100).toFixed(0) : '',
   )
-  const [showCats, setShowCats] = useState(false)
 
   const saveBudget = async () => {
     const paise = budgetDraft ? parseAmount(budgetDraft) : 0
@@ -241,7 +252,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
   return (
     <div className="space-y-4">
       {/* budget */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-1 text-[13.5px] font-bold">Monthly spending budget</div>
         <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           Powers the safe-to-spend figure, the burn-rate ring and the runway insight.
@@ -261,7 +272,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
       </section>
 
       {/* currency */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-3 text-[13.5px] font-bold">Currency</div>
         <div className="flex flex-wrap gap-1.5">
           {CURRENCIES.map((c) => {
@@ -289,7 +300,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
       </section>
 
       {/* appearance */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-3 text-[13.5px] font-bold">Appearance</div>
         <div className="grid grid-cols-3 gap-2">
           {(['light', 'dark', 'system'] as const).map((t) => {
@@ -315,39 +326,19 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
         <div className="mt-2 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Currently showing: {mode} mode</div>
       </section>
 
-      {/* categories */}
-      <section className="card p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="text-[13.5px] font-bold">Categories</div>
-          <button
-            onClick={() => setShowCats((v) => !v)}
-            className="text-[11.5px] font-bold text-[var(--md-sys-color-primary)]"
-          >
-            {showCats ? 'Hide' : `Show all (${categories.length})`}
-          </button>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {categories
-            .filter((c) => (showCats ? true : !c.archived))
-            .map((c) => (
-              <span
-                key={c.id}
-                className="chip"
-                style={{
-                  background: `color-mix(in oklab, ${c.color} 13%, transparent)`,
-                  color: c.color,
-                  borderColor: 'transparent',
-                }}
-              >
-                <span className="h-1.5 w-1.5 rounded-full" style={{ background: c.color }} />
-                {c.name}
-              </span>
-            ))}
-        </div>
+      {/* categories — full editor */}
+      <section className="glass glass-enter p-4">
+        <div className="mb-1 text-[13.5px] font-bold">Categories</div>
+        <p className="mb-3.5 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
+          Add, rename, recolour, re-order, set monthly caps, or archive. Deleted
+          categories hand their transactions to another category rather than
+          losing them.
+        </p>
+        <CategoryManager />
       </section>
 
       {/* backup shortcut */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-1 text-[13.5px] font-bold">Backups & data</div>
         <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           Connect Google Drive, restore a snapshot, or export/import CSV.
@@ -358,7 +349,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
       </section>
 
       {/* about */}
-      <section className="card p-4">
+      <section className="glass glass-enter p-4">
         <div className="mb-2 text-[13.5px] font-bold">About Khata</div>
         <ul className="space-y-1.5 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           <li>· All data lives on this device (IndexedDB). No server, no account.</li>

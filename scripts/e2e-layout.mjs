@@ -85,7 +85,7 @@ await page.waitForTimeout(700)
 const lastVisible = await page.evaluate(() => {
   const nav = document.querySelector('nav')
   const navTop = nav ? nav.getBoundingClientRect().top : window.innerHeight
-  const cards = [...document.querySelectorAll('section.card, .card')]
+  const cards = [...document.querySelectorAll('section.glass, .glass')]
   const last = cards[cards.length - 1]
   if (!last) return { ok: false, why: 'no cards' }
   const r = last.getBoundingClientRect()

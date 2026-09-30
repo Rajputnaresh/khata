@@ -19,6 +19,9 @@ const ICONS: Record<string, LucideIcon> = {
   Briefcase, Sparkles: SparklesI, Landmark, Building2, Undo2, Coins, Tag,
 }
 
+/** The icon palette offered in the category editor. */
+export const ICON_CHOICES = Object.keys(ICONS).sort()
+
 export function CategoryIcon({ name, className = 'h-4 w-4' }: { name: string; className?: string }) {
   const Cmp = ICONS[name] ?? Tag
   return <Cmp className={className} strokeWidth={2.2} />
@@ -312,7 +315,7 @@ export function TxEditor({
           </label>
           <input
             id="tx-note"
-            className="field"
+            className="glass-field"
             value={draft.note}
             onChange={(e) => setDraft({ ...draft, note: e.target.value })}
             placeholder={draft.type === 'expense' ? 'Lunch at Cafe Blue' : 'Salary for October'}
@@ -326,7 +329,7 @@ export function TxEditor({
               <button
                 key={s}
                 onClick={() => setDraft({ ...draft, note: s })}
-                className="chip text-[11px] text-[var(--md-sys-color-on-surface-variant)] hover:bg-[var(--md-sys-color-surface-container-highest)]"
+                className="glass-chip text-[11px] text-[var(--md-sys-color-on-surface-variant)] hover:bg-[var(--md-sys-color-surface-container-highest)]"
               >
                 <Sparkles size={10} />
                 {s}
@@ -344,7 +347,7 @@ export function TxEditor({
             <input
               id="tx-date"
               type="date"
-              className="field"
+              className="glass-field"
               value={draft.date}
               max={today()}
               onChange={(e) => setDraft({ ...draft, date: e.target.value || today() })}
