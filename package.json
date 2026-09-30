@@ -9,7 +9,7 @@
     "build": "tsc -p tsconfig.json --noEmit && vite build",
     "preview": "vite preview --port 4173",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "icons": "node scripts/make-icons.mjs",
+    "icons": "python3 scripts/make-icons-from-image.py assets/app-icon-source.png",
     "test": "node --test --experimental-strip-types tests/*.test.mjs",
     "test:e2e": "node scripts/e2e.mjs",
     "test:insights": "node scripts/e2e-insights.mjs",
@@ -18,7 +18,8 @@
     "test:live": "node scripts/e2e-live.mjs",
     "theme": "node scripts/gen-theme.mjs",
     "fonts": "node scripts/fetch-fonts.mjs",
-    "verify:m3": "node scripts/verify-m3.mjs"
+    "verify:m3": "node scripts/verify-m3.mjs",
+    "icons:preview": "node scripts/icon-preview.mjs"
   },
   "keywords": [
     "budget",
@@ -35,7 +36,6 @@
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-react": "^6.1.1",
     "playwright": "^1.61.1",
-    "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "vite": "^8.3.1",
     "vite-plugin-pwa": "^1.3.0"

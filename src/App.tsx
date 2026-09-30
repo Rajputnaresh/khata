@@ -97,12 +97,14 @@ function App() {
       <header className="safe-t sticky top-0 z-30 bg-surface shadow-[var(--md-sys-elevation-level1)]">
         <div className="safe-x mx-auto flex max-w-3xl items-center justify-between px-4 py-2">
           <div className="flex items-center gap-2.5">
-            <span
-              className="flex h-8 w-8 items-center justify-center"
-              style={{ background: 'var(--md-sys-color-primary-container)', color: 'var(--md-sys-color-on-primary-container)', borderRadius: 'var(--radius-sm)' }}
-            >
-              <Wallet size={17} strokeWidth={2.4} />
-            </span>
+            <img
+              src="./icons/icon-192.png"
+              alt=""
+              width={32}
+              height={32}
+              className="h-8 w-8"
+              style={{ borderRadius: 'var(--radius-sm)' }}
+            />
             <span className="title-lg">Khata</span>
           </div>
           <button
