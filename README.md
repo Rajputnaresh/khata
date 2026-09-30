@@ -198,7 +198,42 @@ hits floating-point drift; formatting to `₹1,234.56` happens only at render.
 ## Tech
 
 Vite · React 19 · TypeScript · Tailwind CSS v4 · Dexie (IndexedDB) ·
-vite-plugin-pwa / Workbox · Web Crypto · lucide-react · Google Drive API v3.
+vite-plugin-pwa / Workbox · Web Crypto · lucide-react · Google Drive API v3 ·
+`@material/material-color-utilities` (build-time only).
 
 No chart library — the charts are hand-rolled SVG, so there is no heavy
 dependency and the bundle stays small.
+
+---
+
+## Material Design 3
+
+The UI is built on the M3 design system, not a hand-picked palette.
+
+`src/lib/m3.ts` derives **34 canonical `--md-sys-color-*` roles** (light and
+dark) from a single seed colour using Google's own HCT colour engine, plus the
+M3 type scale, corner scale, motion easings and elevation levels. The result is
+committed to `src/styles/m3.generated.css`, so a normal build never needs the
+colour engine and the browser gets plain CSS variables with zero runtime cost.
+
+```bash
+npm run theme      # regenerate the M3 tokens after changing the seed
+npm run fonts      # re-download the self-hosted Roboto subsets
+npm run verify:m3  # assert WCAG contrast for every role pair
+```
+
+**Brand pinning.** Material's stock `SchemeTonalSpot` deliberately desaturates a
+seed; run against the saffron seed it drifted to a dusty rose, losing the brand.
+`src/lib/brand-scheme.ts` subclasses it and pins only the primary family to the
+seed's own hue, keeping the seed's chroma. Every other role still comes from
+Google's generated scheme, so the palette stays coherent. (`SchemeTonalSpot`'s
+roles are prototype getters, so they have to be overridden — assigning to them
+silently does nothing.)
+
+**Contrast is verified, not assumed.** `verify:m3` checks 13 foreground /
+background pairs the UI actually uses. All pass AA, worst case 4.28:1 against a
+3:1 requirement.
+
+Roboto is self-hosted as woff2 (latin + latin-ext, 112 KB) rather than loaded
+from Google Fonts, so the app keeps working with no network and makes no
+third-party requests.
