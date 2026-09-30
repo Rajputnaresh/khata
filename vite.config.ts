@@ -36,8 +36,8 @@ export default defineConfig({
         display: 'standalone',
         display_override: ['window-controls-overlay', 'standalone', 'minimal-ui'],
         orientation: 'portrait-primary',
-        background_color: '#14110F',
-        theme_color: '#14110F',
+        background_color: '#fff8f6',
+        theme_color: '#fff8f6',
         categories: ['finance', 'productivity', 'utilities'],
         prefer_related_applications: false,
         icons: [

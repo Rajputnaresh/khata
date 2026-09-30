@@ -42,7 +42,7 @@ export function Donut({
   const focused = active ? slices.find((s) => s.id === active) : null
   const shown = focused
     ? { label: focused.label, value: focused.value, color: focused.color }
-    : { label: centerLabel ?? 'Total', value: total, color: 'var(--fg)' }
+    : { label: centerLabel ?? 'Total', value: total, color: 'var(--md-sys-color-on-surface)' }
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -58,7 +58,7 @@ export function Donut({
           cy={size / 2}
           r={r}
           fill="none"
-          stroke="var(--line)"
+          stroke="var(--md-sys-color-outline-variant)"
           strokeWidth={thickness}
         />
         {arcs.map((a, i) => (
@@ -90,7 +90,7 @@ export function Donut({
         >
           {money(shown.value, currency, decimals === 0 ? 0 : 0)}
         </span>
-        <span className="mt-0.5 max-w-[80%] truncate text-[11px] font-medium text-[var(--fg-subtle)]">
+        <span className="mt-0.5 max-w-[80%] truncate text-[11px] font-medium text-[var(--md-sys-color-on-surface-variant)]">
           {shown.label}
         </span>
       </div>
@@ -167,15 +167,15 @@ export function AreaTrend({
       >
         <defs>
           <linearGradient id={`${gradId}-fill`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--color-saffron)" stopOpacity="0.32" />
-            <stop offset="100%" stopColor="var(--color-saffron)" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--md-sys-color-primary)" stopOpacity="0.32" />
+            <stop offset="100%" stopColor="var(--md-sys-color-primary)" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path d={area} fill={`url(#${gradId}-fill)`} />
         <path
           d={path}
           fill="none"
-          stroke="var(--color-saffron)"
+          stroke="var(--md-sys-color-primary)"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -197,8 +197,8 @@ export function AreaTrend({
               cx={p.x}
               cy={p.y}
               r={hover === i ? 4.5 : 2.5}
-              fill="var(--surface)"
-              stroke="var(--color-saffron)"
+              fill="var(--md-sys-color-surface)"
+              stroke="var(--md-sys-color-primary)"
               strokeWidth="2"
               className="transition-all"
             />
@@ -211,13 +211,13 @@ export function AreaTrend({
           style={{
             left: `${(active.x / W) * 100}%`,
             top: Math.max(0, active.y - 34),
-            background: 'var(--surface-2)',
-            borderColor: 'var(--line)',
-            color: 'var(--fg)',
+            background: 'var(--md-sys-color-surface-container-low)',
+            borderColor: 'var(--md-sys-color-outline-variant)',
+            color: 'var(--md-sys-color-on-surface)',
           }}
         >
           <div className="tnum">{money(active.value, currency, decimals)}</div>
-          <div className="font-medium text-[var(--fg-subtle)]">{active.label}</div>
+          <div className="font-medium text-[var(--md-sys-color-on-surface-variant)]">{active.label}</div>
         </div>
       )}
     </div>
@@ -263,9 +263,9 @@ export function BarChart({
                 <div
                   className="tnum absolute -top-1 whitespace-nowrap rounded-md border px-1.5 py-0.5 text-[10px] font-semibold shadow-md"
                   style={{
-                    background: 'var(--surface-2)',
-                    borderColor: 'var(--line)',
-                    color: 'var(--fg)',
+                    background: 'var(--md-sys-color-surface-container-low)',
+                    borderColor: 'var(--md-sys-color-outline-variant)',
+                    color: 'var(--md-sys-color-on-surface)',
                   }}
                 >
                   {money(d.value, currency, decimals === 0 ? 0 : 0)}
@@ -275,7 +275,7 @@ export function BarChart({
                 className="anim-bar w-full rounded-t-[3px] transition-all duration-200"
                 style={{
                   height: h,
-                  background: on ? 'var(--color-saffron)' : 'color-mix(in oklab, var(--color-saffron) 42%, transparent)',
+                  background: on ? 'var(--md-sys-color-primary)' : 'color-mix(in oklab, var(--md-sys-color-primary) 42%, transparent)',
                   animationDelay: `${i * 28}ms`,
                 }}
               />
@@ -287,7 +287,7 @@ export function BarChart({
         {data.map((d, i) => (
           <div
             key={`lbl-${d.label}-${i}`}
-            className="flex-1 text-center text-[9px] font-medium text-[var(--fg-subtle)]"
+            className="flex-1 text-center text-[9px] font-medium text-[var(--md-sys-color-on-surface-variant)]"
           >
             {d.label}
           </div>
@@ -319,12 +319,12 @@ export function BudgetRing({
   const projFrac = Math.min(1, projected)
   const over = used > 1
 
-  const state = over ? 'var(--color-clay)' : projected > 1 ? 'var(--color-amber)' : 'var(--color-mint)'
+  const state = over ? 'var(--tone-bad)' : projected > 1 ? 'var(--tone-warn)' : 'var(--tone-good)'
 
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--line)" strokeWidth="10" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--md-sys-color-outline-variant)" strokeWidth="10" />
         {projected > used && (
           <circle
             cx={size / 2}
@@ -357,7 +357,7 @@ export function BudgetRing({
         <span className="tnum text-[15px] font-bold" style={{ color: state }}>
           {Math.round(used * 100)}%
         </span>
-        <span className="text-[9px] font-semibold uppercase tracking-wider text-[var(--fg-subtle)]">
+        <span className="text-[9px] font-semibold uppercase tracking-wider text-[var(--md-sys-color-on-surface-variant)]">
           used
         </span>
       </div>
@@ -396,13 +396,13 @@ export function CategoryBars({
               {money(s.amount, currency, decimals === 0 ? 0 : 0)}
             </span>
           </div>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--line)]">
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-[var(--md-sys-color-outline-variant)]">
             <div
               className="h-full rounded-full"
               style={{
                 width: `${Math.max(2, s.share * 100)}%`,
                 background: s.category.color,
-                transition: 'width .6s var(--ease-out-quint)',
+                transition: 'width .6s var(--md-sys-motion-easing-emphasized)',
                 transitionDelay: `${i * 40}ms`,
               }}
             />
@@ -436,13 +436,13 @@ export function MonthColumns({
               style={{
                 height: Math.max(3, (d.value / max) * 100),
                 background: isLatest
-                  ? 'var(--color-saffron)'
-                  : 'color-mix(in oklab, var(--color-saffron) 28%, transparent)',
+                  ? 'var(--md-sys-color-primary)'
+                  : 'color-mix(in oklab, var(--md-sys-color-primary) 28%, transparent)',
                 transitionDelay: '0ms',
               }}
               title={`${d.label}: ${moneyCompact(d.value, currency)}`}
             />
-            <span className="text-[9px] font-medium text-[var(--fg-subtle)]">{d.label}</span>
+            <span className="text-[9px] font-medium text-[var(--md-sys-color-on-surface-variant)]">{d.label}</span>
           </div>
         )
       })}

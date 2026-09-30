@@ -268,8 +268,8 @@ export function BackupView() {
           <div
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl"
             style={{
-              background: connected ? 'color-mix(in oklab, var(--color-mint) 15%, transparent)' : 'var(--surface-3)',
-              color: connected ? 'var(--color-mint)' : 'var(--fg-subtle)',
+              background: connected ? 'color-mix(in oklab, var(--tone-good) 15%, transparent)' : 'var(--md-sys-color-surface-container-highest)',
+              color: connected ? 'var(--tone-good)' : 'var(--md-sys-color-on-surface-variant)',
             }}
           >
             {connected ? <Cloud size={21} /> : <CloudOff size={21} />}
@@ -278,13 +278,13 @@ export function BackupView() {
             <div className="text-[15px] font-bold tracking-tight">
               {connected ? 'Google Drive connected' : 'Backups are off'}
             </div>
-            <div className="mt-0.5 text-[12px] leading-relaxed text-[var(--fg-muted)]">
+            <div className="mt-0.5 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
               {connected
                 ? `Encrypted snapshots go to a hidden Drive folder${lastBackup ? ` · last one ${lastBackup}` : ''}.`
                 : 'Connect Drive to keep unlimited encrypted snapshots of your data.'}
             </div>
             {quotaInfo && connected && (
-              <div className="mt-1.5 text-[11px] font-medium text-[var(--fg-subtle)]">{quotaInfo}</div>
+              <div className="mt-1.5 text-[11px] font-medium text-[var(--md-sys-color-on-surface-variant)]">{quotaInfo}</div>
             )}
           </div>
         </div>
@@ -293,24 +293,24 @@ export function BackupView() {
       {/* how it works */}
       <section className="card p-4">
         <div className="mb-3 flex items-center gap-1.5 text-[13px] font-bold">
-          <ShieldCheck size={15} style={{ color: 'var(--color-mint)' }} />
+          <ShieldCheck size={15} style={{ color: 'var(--tone-good)' }} />
           How your backup stays private
         </div>
-        <ul className="space-y-2 text-[12px] leading-relaxed text-[var(--fg-muted)]">
+        <ul className="space-y-2 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           <li className="flex gap-2">
-            <Lock size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--color-saffron)' }} />
+            <Lock size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--md-sys-color-primary)' }} />
             Your passphrase never leaves this device and is not stored with the backup.
           </li>
           <li className="flex gap-2">
-            <Lock size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--color-saffron)' }} />
+            <Lock size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--md-sys-color-primary)' }} />
             Data is encrypted with AES-256-GCM before it touches the network.
           </li>
           <li className="flex gap-2">
-            <FolderLock size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--color-saffron)' }} />
+            <FolderLock size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--md-sys-color-primary)' }} />
             Backups land in Drive's appDataFolder — invisible in "My Drive", so it never clutters your files.
           </li>
           <li className="flex gap-2">
-            <RefreshCw size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--color-saffron)' }} />
+            <RefreshCw size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--md-sys-color-primary)' }} />
             The newest {KEEP} snapshots are kept; older ones are rotated out automatically.
           </li>
         </ul>
@@ -320,7 +320,7 @@ export function BackupView() {
       {!connected && (
         <section className="card space-y-3 p-4">
           <div className="text-[13.5px] font-bold">One-time setup</div>
-          <p className="text-[12px] leading-relaxed text-[var(--fg-muted)]">
+          <p className="text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
             Khata needs a Google OAuth <em>client ID</em> to use Drive. Create a free project in Google
             Cloud, enable the Drive API, then paste the client ID below. Full steps are in the README.
           </p>
@@ -352,7 +352,7 @@ export function BackupView() {
                 </label>
                 <button
                   onClick={() => setShowPass((v) => !v)}
-                  className="text-[11px] font-bold text-[var(--color-saffron)]"
+                  className="text-[11px] font-bold text-[var(--md-sys-color-primary)]"
                 >
                   {showPass ? 'Hide' : 'Show'}
                 </button>
@@ -369,7 +369,7 @@ export function BackupView() {
                 />
                 <KeyRound
                   size={15}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--fg-subtle)]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--md-sys-color-on-surface-variant)]"
                 />
               </div>
               {passphrase.length > 0 && (
@@ -382,15 +382,15 @@ export function BackupView() {
                         style={{
                           background:
                             i < strength.score
-                              ? ['var(--color-clay)', 'var(--color-amber)', 'var(--color-amber)', 'var(--color-mint)', 'var(--color-mint)'][
+                              ? ['var(--tone-bad)', 'var(--tone-warn)', 'var(--tone-warn)', 'var(--tone-good)', 'var(--tone-good)'][
                                   strength.score
                                 ]
-                              : 'var(--line)',
+                              : 'var(--md-sys-color-outline-variant)',
                         }}
                       />
                     ))}
                   </div>
-                  <div className="text-[11px] text-[var(--fg-subtle)]">
+                  <div className="text-[11px] text-[var(--md-sys-color-on-surface-variant)]">
                     Strength: <span className="font-semibold">{strength.label}</span> — you need this exact
                     passphrase to restore.
                   </div>
@@ -410,7 +410,7 @@ export function BackupView() {
               )}
             </button>
             {!canBackup && (
-              <p className="text-[11px] text-[var(--fg-subtle)]">
+              <p className="text-[11px] text-[var(--md-sys-color-on-surface-variant)]">
                 Enter a passphrase of at least 6 characters to enable backups.
               </p>
             )}
@@ -421,12 +421,12 @@ export function BackupView() {
           <section className="card p-4">
             <div className="mb-3 flex items-center justify-between">
               <div className="text-[13.5px] font-bold">Snapshots ({backups.length})</div>
-              <button onClick={refresh} className="text-[11.5px] font-bold text-[var(--color-saffron)]">
+              <button onClick={refresh} className="text-[11.5px] font-bold text-[var(--md-sys-color-primary)]">
                 Refresh
               </button>
             </div>
             {backups.length === 0 ? (
-              <p className="py-4 text-center text-[12.5px] text-[var(--fg-subtle)]">
+              <p className="py-4 text-center text-[12.5px] text-[var(--md-sys-color-on-surface-variant)]">
                 No snapshots yet. Tap "Back up now" to create your first.
               </p>
             ) : (
@@ -434,10 +434,10 @@ export function BackupView() {
                 {backups.map((b) => {
                   const d = new Date(b.modifiedTime)
                   return (
-                    <div key={b.id} className="flex items-center gap-2.5 rounded-xl bg-[var(--surface-3)] px-3 py-2.5">
+                    <div key={b.id} className="flex items-center gap-2.5 rounded-xl bg-[var(--md-sys-color-surface-container-highest)] px-3 py-2.5">
                       <div className="min-w-0 flex-1">
                         <div className="truncate text-[12.5px] font-semibold">{b.name}</div>
-                        <div className="text-[11px] text-[var(--fg-subtle)]">
+                        <div className="text-[11px] text-[var(--md-sys-color-on-surface-variant)]">
                           {d.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })} ·{' '}
                           {formatBytes(Number(b.size) || 0)}
                         </div>
@@ -445,7 +445,7 @@ export function BackupView() {
                       <button
                         onClick={() => doRestore(b.id)}
                         disabled={!canBackup || busy !== null}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--surface)] disabled:opacity-40"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--md-sys-color-surface)] disabled:opacity-40"
                         aria-label={`Restore ${b.name}`}
                         title="Restore this snapshot"
                       >
@@ -454,18 +454,18 @@ export function BackupView() {
                       <button
                         onClick={() => deleteBackup(b.id)}
                         disabled={busy !== null}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--surface)] disabled:opacity-40"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--md-sys-color-surface)] disabled:opacity-40"
                         aria-label={`Delete ${b.name}`}
                         title="Delete this snapshot"
                       >
-                        <Trash2 size={14} style={{ color: 'var(--color-clay)' }} />
+                        <Trash2 size={14} style={{ color: 'var(--tone-bad)' }} />
                       </button>
                     </div>
                   )
                 })}
               </div>
             )}
-            <button className="btn btn-ghost mt-3 w-full" onClick={disconnect}>
+            <button className="btn btn-tonal mt-3 w-full" onClick={disconnect}>
               Disconnect Drive
             </button>
           </section>
@@ -475,7 +475,7 @@ export function BackupView() {
       {/* local export/import — always available */}
       <section className="card p-4">
         <div className="mb-1 text-[13.5px] font-bold">Move data in and out</div>
-        <p className="mb-3 text-[12px] leading-relaxed text-[var(--fg-muted)]">
+        <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           CSV is plain text — open it in any spreadsheet, or use it to load history from another app.
         </p>
         <div className="flex gap-2">
@@ -501,20 +501,20 @@ export function BackupView() {
       {/* danger */}
       <section className="card p-4">
         <div className="mb-1 text-[13.5px] font-bold">Erase everything</div>
-        <p className="mb-3 text-[12px] leading-relaxed text-[var(--fg-muted)]">
+        <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           Removes all transactions, categories and settings from this device. Backups in Drive are not
           affected.
         </p>
         <button
           className="btn w-full"
-          style={{ background: 'color-mix(in oklab, var(--color-clay) 12%, transparent)', color: 'var(--color-clay)' }}
+          style={{ background: 'color-mix(in oklab, var(--tone-bad) 12%, transparent)', color: 'var(--tone-bad)' }}
           onClick={() => setResetOpen(true)}
         >
           <Trash2 size={15} /> Erase all local data
         </button>
       </section>
 
-      <div className="flex items-start gap-2 px-1 pb-2 text-[11px] leading-relaxed text-[var(--fg-subtle)]">
+      <div className="flex items-start gap-2 px-1 pb-2 text-[11px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
         <WifiOff size={13} className="mt-0.5 shrink-0" />
         <span>
           Khata works with no connection at all. Backups only need internet when you tap "Back up now".
@@ -522,7 +522,7 @@ export function BackupView() {
       </div>
 
       <Sheet open={restoreOpen} onClose={() => setRestoreOpen(false)} title="Restore">
-        <p className="text-[13px] text-[var(--fg-muted)]">Pick a snapshot from the list above to restore.</p>
+        <p className="text-[13px] text-[var(--md-sys-color-on-surface-variant)]">Pick a snapshot from the list above to restore.</p>
       </Sheet>
 
       <Confirm
@@ -546,7 +546,7 @@ function ErrorNote({ msg }: { msg: string }) {
   return (
     <div
       className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-[12px] font-medium leading-relaxed"
-      style={{ background: 'color-mix(in oklab, var(--color-clay) 12%, transparent)', color: 'var(--color-clay)' }}
+      style={{ background: 'color-mix(in oklab, var(--tone-bad) 12%, transparent)', color: 'var(--tone-bad)' }}
     >
       <AlertCircle size={14} className="mt-0.5 shrink-0" />
       {msg}

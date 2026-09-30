@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 import App from './App'
-import './styles/app.css'
+import './styles/m3.css'
 
 const el = document.getElementById('root')
 if (!el) throw new Error('Root element missing')

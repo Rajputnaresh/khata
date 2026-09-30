@@ -1,0 +1,241 @@
+/* ==========================================================================
+   Material Design 3 — generated from @material/material-color-utilities
+   Seed: #E8734A
+   Do not edit by hand: regenerate with `npm run theme`.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Material 3 color roles (light) ---- */
+  --md-sys-color-primary: #b24b25;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #ffdbd0;
+  --md-sys-color-on-primary-container: #6b2409;
+  --md-sys-color-inverse-primary: #ffb59d;
+  --md-sys-color-secondary: #77574d;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #ffdbd0;
+  --md-sys-color-on-secondary-container: #5d4036;
+  --md-sys-color-tertiary: #6a5e2f;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #f3e2a7;
+  --md-sys-color-on-tertiary-container: #51461a;
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #93000a;
+  --md-sys-color-warning: #7e5700;
+  --md-sys-color-on-warning: #ffffff;
+  --md-sys-color-warning-container: #5f4100;
+  --md-sys-color-on-warning-container: #2a1a00;
+  --md-sys-color-success: #296a47;
+  --md-sys-color-on-success: #ffffff;
+  --md-sys-color-success-container: #095131;
+  --md-sys-color-on-success-container: #00210f;
+  --md-sys-color-background: #fff8f6;
+  --md-sys-color-on-background: #231917;
+  --md-sys-color-surface: #fff8f6;
+  --md-sys-color-on-surface: #231917;
+  --md-sys-color-surface-variant: #f5ded7;
+  --md-sys-color-on-surface-variant: #53433f;
+  --md-sys-color-surface-dim: #e8d6d1;
+  --md-sys-color-surface-bright: #fff8f6;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #fff1ed;
+  --md-sys-color-surface-container: #fceae5;
+  --md-sys-color-surface-container-high: #f7e4df;
+  --md-sys-color-surface-container-highest: #f1dfda;
+  --md-sys-color-outline: #85736e;
+  --md-sys-color-outline-variant: #d8c2bb;
+  --md-sys-color-inverse-surface: #392e2b;
+  --md-sys-color-inverse-on-surface: #ffede8;
+  --md-sys-color-inverse-surface-variant: #e6e0e9;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+
+  /* ---- Type scale: Material 3 ---- */
+  --md-sys-typescale-display-large-size: 3.5625rem;
+  --md-sys-typescale-display-large-line: 4rem;
+  --md-sys-typescale-display-large-weight: 400;
+  --md-sys-typescale-display-large-tracking: -0.0156rem;
+
+  --md-sys-typescale-headline-large-size: 2rem;
+  --md-sys-typescale-headline-large-line: 2.5rem;
+  --md-sys-typescale-headline-large-weight: 400;
+  --md-sys-typescale-headline-large-tracking: 0rem;
+
+  --md-sys-typescale-headline-medium-size: 1.75rem;
+  --md-sys-typescale-headline-medium-line: 2.25rem;
+  --md-sys-typescale-headline-medium-weight: 400;
+
+  --md-sys-typescale-title-large-size: 1.375rem;
+  --md-sys-typescale-title-large-line: 1.75rem;
+  --md-sys-typescale-title-large-weight: 500;
+  --md-sys-typescale-title-large-tracking: 0.0098rem;
+
+  --md-sys-typescale-title-medium-size: 1rem;
+  --md-sys-typescale-title-medium-line: 1.5rem;
+  --md-sys-typescale-title-medium-weight: 500;
+  --md-sys-typescale-title-medium-tracking: 0.0098rem;
+
+  --md-sys-typescale-title-small-size: 0.875rem;
+  --md-sys-typescale-title-small-line: 1.25rem;
+  --md-sys-typescale-title-small-weight: 500;
+  --md-sys-typescale-title-small-tracking: 0.0078rem;
+
+  --md-sys-typescale-body-large-size: 1rem;
+  --md-sys-typescale-body-large-line: 1.5rem;
+  --md-sys-typescale-body-large-weight: 400;
+  --md-sys-typescale-body-large-tracking: 0.0313rem;
+
+  --md-sys-typescale-body-medium-size: 0.875rem;
+  --md-sys-typescale-body-medium-line: 1.25rem;
+  --md-sys-typescale-body-medium-weight: 400;
+  --md-sys-typescale-body-medium-tracking: 0.0156rem;
+
+  --md-sys-typescale-body-small-size: 0.75rem;
+  --md-sys-typescale-body-small-line: 1rem;
+  --md-sys-typescale-body-small-weight: 400;
+  --md-sys-typescale-body-small-tracking: 0.0333rem;
+
+  --md-sys-typescale-label-large-size: 0.875rem;
+  --md-sys-typescale-label-large-line: 1.25rem;
+  --md-sys-typescale-label-large-weight: 500;
+  --md-sys-typescale-label-large-tracking: 0.0063rem;
+
+  --md-sys-typescale-label-medium-size: 0.75rem;
+  --md-sys-typescale-label-medium-line: 1rem;
+  --md-sys-typescale-label-medium-weight: 500;
+  --md-sys-typescale-label-medium-tracking: 0.0313rem;
+
+  --md-sys-typescale-label-small-size: 0.6875rem;
+  --md-sys-typescale-label-small-line: 1rem;
+  --md-sys-typescale-label-small-weight: 500;
+  --md-sys-typescale-label-small-tracking: 0.0333rem;
+
+  /* ---- Shape: Material 3 corner scale ---- */
+  --md-sys-shape-corner-none: 0rem;
+  --md-sys-shape-corner-extra-small: 0.25rem;
+  --md-sys-shape-corner-small: 0.5rem;
+  --md-sys-shape-corner-medium: 0.75rem;
+  --md-sys-shape-corner-large: 1rem;
+  --md-sys-shape-corner-extra-large: 1.75rem;
+  --md-sys-shape-corner-full: 62.5rem;
+
+  /* ---- Motion: Material 3 easing ---- */
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+  --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long2: 500ms;
+
+  /* ---- Elevation ---- */
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1: 0 1px 2px rgb(0 0 0 / 0.30), 0 1px 3px 1px rgb(0 0 0 / 0.15);
+  --md-sys-elevation-level2: 0 1px 2px rgb(0 0 0 / 0.30), 0 2px 6px 2px rgb(0 0 0 / 0.15);
+  --md-sys-elevation-level3: 0 4px 8px 3px rgb(0 0 0 / 0.15), 0 1px 3px rgb(0 0 0 / 0.30);
+  --md-sys-elevation-level4: 0 6px 10px 4px rgb(0 0 0 / 0.15), 0 2px 3px rgb(0 0 0 / 0.30);
+  --md-sys-elevation-level5: 0 8px 12px 6px rgb(0 0 0 / 0.15), 0 4px 4px rgb(0 0 0 / 0.30);
+
+  /* ---- Category accents (light) ---- */
+  --md-sys-color-cat-saffron-solid: #b24b25;
+  --md-sys-color-cat-saffron-container: #ffdbd0;
+  --md-sys-color-cat-saffron-on-container: #6a250a;
+  --md-sys-color-cat-mint-solid: #107a4b;
+  --md-sys-color-cat-mint-container: #cdead4;
+  --md-sys-color-cat-mint-on-container: #004528;
+  --md-sys-color-cat-clay-solid: #af466a;
+  --md-sys-color-cat-clay-container: #ffd9e1;
+  --md-sys-color-cat-clay-on-container: #69213b;
+  --md-sys-color-cat-amber-solid: #8d6300;
+  --md-sys-color-cat-amber-container: #fadfb6;
+  --md-sys-color-cat-amber-on-container: #503700;
+  --md-sys-color-cat-slateBlue-solid: #246db0;
+  --md-sys-color-cat-slateBlue-container: #d3e4fd;
+  --md-sys-color-cat-slateBlue-on-container: #003d6b;
+  --md-sys-color-cat-teal-solid: #00786b;
+  --md-sys-color-cat-teal-container: #cbe9e2;
+  --md-sys-color-cat-teal-on-container: #00443c;
+  --md-sys-color-cat-violet-solid: #7959b4;
+  --md-sys-color-cat-violet-container: #ebddfe;
+  --md-sys-color-cat-violet-on-container: #452f6f;
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* ---- Material 3 color roles (dark) ---- */
+  --md-sys-color-primary: #ffa181;
+  --md-sys-color-on-primary: #000000;
+  --md-sys-color-primary-container: #74341e;
+  --md-sys-color-on-primary-container: #ffdbd0;
+  --md-sys-color-inverse-primary: #a23f1a;
+  --md-sys-color-secondary: #e7bdb0;
+  --md-sys-color-on-secondary: #442a21;
+  --md-sys-color-secondary-container: #5d4036;
+  --md-sys-color-on-secondary-container: #ffdbd0;
+  --md-sys-color-tertiary: #d6c68d;
+  --md-sys-color-on-tertiary: #393005;
+  --md-sys-color-tertiary-container: #51461a;
+  --md-sys-color-on-tertiary-container: #f3e2a7;
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+  --md-sys-color-warning: #f7bd53;
+  --md-sys-color-on-warning: #2b1a00;
+  --md-sys-color-warning-container: #5f4100;
+  --md-sys-color-on-warning-container: #ffdea8;
+  --md-sys-color-success: #296a47;
+  --md-sys-color-on-success: #00150b;
+  --md-sys-color-success-container: #095131;
+  --md-sys-color-on-success-container: #9df2bd;
+  --md-sys-color-background: #1a110f;
+  --md-sys-color-on-background: #f1dfda;
+  --md-sys-color-surface: #1a110f;
+  --md-sys-color-on-surface: #f1dfda;
+  --md-sys-color-surface-variant: #53433f;
+  --md-sys-color-on-surface-variant: #d8c2bb;
+  --md-sys-color-surface-dim: #1a110f;
+  --md-sys-color-surface-bright: #423733;
+  --md-sys-color-surface-container-lowest: #140c0a;
+  --md-sys-color-surface-container-low: #231917;
+  --md-sys-color-surface-container: #271d1a;
+  --md-sys-color-surface-container-high: #322825;
+  --md-sys-color-surface-container-highest: #3d322f;
+  --md-sys-color-outline: #a08d87;
+  --md-sys-color-outline-variant: #53433f;
+  --md-sys-color-inverse-surface: #f1dfda;
+  --md-sys-color-inverse-on-surface: #392e2b;
+  --md-sys-color-inverse-surface-variant: #4e454d;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
+
+  /* ---- Category accents (dark) ---- */
+  --md-sys-color-cat-saffron-solid: #ffa181;
+  --md-sys-color-cat-saffron-container: #643d2f;
+  --md-sys-color-cat-saffron-on-container: #ffdbd0;
+  --md-sys-color-cat-mint-solid: #6ecb95;
+  --md-sys-color-cat-mint-container: #344c3c;
+  --md-sys-color-cat-mint-on-container: #acf2c4;
+  --md-sys-color-cat-clay-solid: #ff9bb8;
+  --md-sys-color-cat-clay-container: #613c46;
+  --md-sys-color-cat-clay-on-container: #ffd9e1;
+  --md-sys-color-cat-amber-solid: #e8af47;
+  --md-sys-color-cat-amber-container: #564426;
+  --md-sys-color-cat-amber-on-container: #ffdeab;
+  --md-sys-color-cat-slateBlue-solid: #84bcff;
+  --md-sys-color-cat-slateBlue-container: #38485c;
+  --md-sys-color-cat-slateBlue-on-container: #d2e4ff;
+  --md-sys-color-cat-teal-solid: #62caba;
+  --md-sys-color-cat-teal-container: #324c47;
+  --md-sys-color-cat-teal-on-container: #a6f1e3;
+  --md-sys-color-cat-violet-solid: #c8aaff;
+  --md-sys-color-cat-violet-container: #4c425d;
+  --md-sys-color-cat-violet-on-container: #ebdcff;
+}

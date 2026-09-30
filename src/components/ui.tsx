@@ -43,10 +43,10 @@ export function ToastHost({ children }: { children: ReactNode }) {
         {items.map((t) => (
           <div
             key={t.id}
-            className="anim-pop pointer-events-auto flex max-w-md items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 text-[13px] font-medium shadow-[var(--shadow-pop)]"
+            className="anim-pop pointer-events-auto flex max-w-md items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 text-[13px] font-medium shadow-[var(--md-sys-elevation-level3)]"
             style={{
-              background: 'var(--surface-2)',
-              borderColor: t.tone === 'err' ? 'color-mix(in oklab, var(--color-clay) 45%, var(--line))' : 'var(--line)',
+              background: 'var(--md-sys-color-surface-container-low)',
+              borderColor: t.tone === 'err' ? 'color-mix(in oklab, var(--tone-bad) 45%, var(--md-sys-color-outline-variant))' : 'var(--md-sys-color-outline-variant)',
             }}
             role="status"
           >
@@ -55,11 +55,11 @@ export function ToastHost({ children }: { children: ReactNode }) {
               style={{
                 background:
                   t.tone === 'ok'
-                    ? 'var(--color-mint)'
+                    ? 'var(--tone-good)'
                     : t.tone === 'err'
-                      ? 'var(--color-clay)'
-                      : 'var(--fg-subtle)',
-                color: '#fff',
+                      ? 'var(--tone-bad)'
+                      : 'var(--md-sys-color-on-surface-variant)',
+                color: 'var(--md-sys-color-on-primary)',
               }}
             >
               {t.tone === 'ok' ? <Check size={10} strokeWidth={3.5} /> : t.tone === 'err' ? <X size={10} strokeWidth={3.5} /> : 'i'}
@@ -71,8 +71,8 @@ export function ToastHost({ children }: { children: ReactNode }) {
                   t.action!.run()
                   dismiss(t.id)
                 }}
-                className="shrink-0 rounded-lg px-2 py-1 text-[12px] font-bold text-[var(--color-saffron)]"
-                style={{ background: 'color-mix(in oklab, var(--color-saffron) 14%, transparent)' }}
+                className="shrink-0 rounded-lg px-2 py-1 text-[12px] font-bold text-[var(--md-sys-color-primary)]"
+                style={{ background: 'color-mix(in oklab, var(--md-sys-color-primary) 14%, transparent)' }}
               >
                 {t.action.label}
               </button>
@@ -123,23 +123,23 @@ export function Sheet({
         aria-label="Close"
       />
       <div
-        className="anim-sheet safe-b relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-[var(--line)] bg-[var(--surface-2)] shadow-[var(--shadow-pop)] sm:max-w-lg sm:rounded-3xl"
+        className="anim-sheet safe-b relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-low)] shadow-[var(--md-sys-elevation-level3)] sm:max-w-lg sm:rounded-3xl"
       >
-        <div className="flex items-center justify-between gap-3 border-b border-[var(--line)] px-4 py-3.5">
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--md-sys-color-outline-variant)] px-4 py-3.5">
           <div className="flex items-center gap-2.5">
-            <span className="h-1 w-8 rounded-full bg-[var(--line-strong)] sm:hidden" />
+            <span className="h-1 w-8 rounded-full bg-[var(--md-sys-color-outline)] sm:hidden" />
             <h2 className="text-[15px] font-bold tracking-tight">{title}</h2>
           </div>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-3)] transition hover:brightness-110"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--md-sys-color-surface-container-highest)] transition hover:brightness-110"
             aria-label="Close"
           >
             <X size={16} />
           </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">{children}</div>
-        {footer && <div className="border-t border-[var(--line)] px-4 py-3">{footer}</div>}
+        {footer && <div className="border-t border-[var(--md-sys-color-outline-variant)] px-4 py-3">{footer}</div>}
       </div>
     </div>
   )
@@ -166,14 +166,14 @@ export function Confirm({
 }) {
   return (
     <Sheet open={open} onClose={onCancel} title={title}>
-      <p className="text-[13.5px] leading-relaxed text-[var(--fg-muted)]">{body}</p>
+      <p className="text-[13.5px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">{body}</p>
       <div className="mt-5 flex gap-2">
-        <button className="btn btn-ghost flex-1" onClick={onCancel}>
+        <button className="btn btn-tonal flex-1" onClick={onCancel}>
           Cancel
         </button>
         <button
           className={`btn flex-1 ${danger ? 'text-white' : 'btn-primary'}`}
-          style={danger ? { background: 'var(--color-clay)' } : undefined}
+          style={danger ? { background: 'var(--tone-bad)' } : undefined}
           onClick={onConfirm}
         >
           {confirmLabel}
@@ -198,7 +198,7 @@ export function SegmentedControl<T extends string>({
 }) {
   return (
     <div
-      className="inline-flex rounded-xl border border-[var(--line)] bg-[var(--surface-3)] p-0.5"
+      className="inline-flex rounded-xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-highest)] p-0.5"
       role="tablist"
     >
       {options.map((o) => {
@@ -211,7 +211,7 @@ export function SegmentedControl<T extends string>({
             onClick={() => onChange(o.value)}
             className={`rounded-[10px] font-semibold transition-all duration-200 ${
               size === 'sm' ? 'px-2.5 py-1 text-[11px]' : 'px-3.5 py-1.5 text-[13px]'
-            } ${on ? 'bg-[var(--surface)] shadow-sm' : 'text-[var(--fg-muted)]'}`}
+            } ${on ? 'bg-[var(--md-sys-color-surface)] shadow-sm' : 'text-[var(--md-sys-color-on-surface-variant)]'}`}
           >
             {o.label}
           </button>
@@ -236,12 +236,12 @@ export function EmptyState({
     <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
       <div
         className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
-        style={{ background: 'color-mix(in oklab, var(--color-saffron) 14%, transparent)', color: 'var(--color-saffron)' }}
+        style={{ background: 'color-mix(in oklab, var(--md-sys-color-primary) 14%, transparent)', color: 'var(--md-sys-color-primary)' }}
       >
         {icon}
       </div>
       <h3 className="text-[15px] font-bold">{title}</h3>
-      <p className="mt-1.5 max-w-[34ch] text-[13px] leading-relaxed text-[var(--fg-muted)]">{body}</p>
+      <p className="mt-1.5 max-w-[34ch] text-[13px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">{body}</p>
       {action && <div className="mt-5">{action}</div>}
     </div>
   )
@@ -262,22 +262,22 @@ export function StatTile({
 }) {
   const color =
     tone === 'good'
-      ? 'var(--color-mint)'
+      ? 'var(--tone-good)'
       : tone === 'bad'
-        ? 'var(--color-clay)'
+        ? 'var(--tone-bad)'
         : tone === 'warn'
-          ? 'var(--color-amber)'
-          : 'var(--fg)'
+          ? 'var(--tone-warn)'
+          : 'var(--md-sys-color-on-surface)'
   return (
     <div className="card p-3.5">
       <div className="mb-1.5 flex items-center gap-1.5">
-        {icon && <span style={{ color: 'var(--fg-subtle)' }}>{icon}</span>}
+        {icon && <span style={{ color: 'var(--md-sys-color-on-surface-variant)' }}>{icon}</span>}
         <span className="label">{label}</span>
       </div>
       <div className="tnum text-[19px] font-bold leading-tight tracking-tight" style={{ color }}>
         {value}
       </div>
-      {sub && <div className="mt-0.5 text-[11px] font-medium text-[var(--fg-subtle)]">{sub}</div>}
+      {sub && <div className="mt-0.5 text-[11px] font-medium text-[var(--md-sys-color-on-surface-variant)]">{sub}</div>}
     </div>
   )
 }

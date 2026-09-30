@@ -83,9 +83,9 @@ function App() {
         <div className="flex flex-col items-center gap-3">
           <div
             className="h-10 w-10 animate-pulse rounded-2xl"
-            style={{ background: 'var(--color-saffron)' }}
+            style={{ background: 'var(--md-sys-color-primary)' }}
           />
-          <span className="text-[12px] font-semibold text-[var(--fg-subtle)]">Opening Khata…</span>
+          <span className="text-[12px] font-semibold text-[var(--md-sys-color-on-surface-variant)]">Opening Khata…</span>
         </div>
       </div>
     )
@@ -93,17 +93,17 @@ function App() {
 
   return (
     <div className="min-h-dvh">
-      {/* top bar */}
-      <header className="safe-t sticky top-0 z-30 border-b border-[var(--line)] bg-[color-mix(in_oklab,var(--surface)_88%,transparent)] backdrop-blur-xl">
-        <div className="safe-x mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <div
-              className="flex h-7 w-7 items-center justify-center rounded-lg"
-              style={{ background: 'var(--color-saffron)' }}
+      {/* top app bar — Material 3 small top app bar */}
+      <header className="safe-t sticky top-0 z-30 bg-surface shadow-[var(--md-sys-elevation-level1)]">
+        <div className="safe-x mx-auto flex max-w-3xl items-center justify-between px-4 py-2">
+          <div className="flex items-center gap-2.5">
+            <span
+              className="flex h-8 w-8 items-center justify-center"
+              style={{ background: 'var(--md-sys-color-primary-container)', color: 'var(--md-sys-color-on-primary-container)', borderRadius: 'var(--radius-sm)' }}
             >
-              <Wallet size={15} color="#fff" strokeWidth={2.5} />
-            </div>
-            <span className="text-[15px] font-extrabold tracking-tight">Khata</span>
+              <Wallet size={17} strokeWidth={2.4} />
+            </span>
+            <span className="title-lg">Khata</span>
           </div>
           <button
             onClick={() => {
@@ -111,9 +111,9 @@ function App() {
               setEditorType('expense')
               setEditorOpen(true)
             }}
-            className="btn btn-primary min-h-11 px-4 py-2 text-[13px]"
+            className="btn btn-tonal min-h-10 px-4"
           >
-            <Plus size={16} strokeWidth={2.8} />
+            <Plus size={18} strokeWidth={2.4} />
             Add
           </button>
         </div>
@@ -142,9 +142,9 @@ function App() {
         )}
       </main>
 
-      {/* bottom nav */}
-      <nav className="safe-b fixed inset-x-0 bottom-0 z-30 border-t border-[var(--line)] bg-[color-mix(in_oklab,var(--surface)_92%,transparent)] backdrop-blur-xl">
-        <div className="safe-x mx-auto flex max-w-3xl items-stretch px-2">
+      {/* bottom nav — Material 3 navigation bar with pill-shaped active item */}
+      <nav className="safe-b fixed inset-x-0 bottom-0 z-30 border-t border-outline-variant bg-surface-container shadow-[var(--md-sys-elevation-level2)]">
+        <div className="safe-x mx-auto flex max-w-3xl items-center gap-1 px-2 py-1.5">
           {TABS.map((t) => {
             const on = tab === t.id
             const Icon = t.icon
@@ -152,32 +152,26 @@ function App() {
               <button
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className="relative flex flex-1 flex-col items-center gap-0.5 py-2.5 transition-colors"
-                style={{ color: on ? 'var(--color-saffron)' : 'var(--fg-subtle)' }}
+                className="nav-item"
                 aria-current={on ? 'page' : undefined}
+                aria-label={t.label}
               >
-                {on && (
-                  <span
-                    className="absolute top-0 h-0.5 w-8 rounded-full"
-                    style={{ background: 'var(--color-saffron)' }}
-                  />
-                )}
-                <Icon size={19} strokeWidth={on ? 2.5 : 2} />
-                <span className="text-[9.5px] font-bold tracking-tight">{t.label}</span>
+                <Icon size={22} strokeWidth={on ? 2.4 : 2} />
+                <span className="label-lg text-[10.5px] leading-none">{t.label}</span>
               </button>
             )
           })}
         </div>
       </nav>
 
-      {/* FAB (mobile only) */}
+      {/* FAB — Material 3 floating action button */}
       <button
         onClick={() => setAddOpen(true)}
-        className="safe-b fixed bottom-[calc(env(safe-area-inset-bottom)+4.75rem)] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl shadow-[var(--shadow-pop)] transition-transform active:scale-90 sm:hidden"
-        style={{ background: 'var(--color-saffron)' }}
+        className="safe-b fixed bottom-[calc(env(safe-area-inset-bottom)+5.25rem)] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-container text-on-primary-container shadow-[var(--md-sys-elevation-level3)] transition-transform active:scale-90 sm:hidden"
+        style={{ borderRadius: 'var(--radius-lg)' }}
         aria-label="Add transaction"
       >
-        <Plus size={26} color="#fff" strokeWidth={2.6} />
+        <Plus size={26} strokeWidth={2.4} />
       </button>
 
       {/* add sheet: choose type first */}
@@ -185,29 +179,29 @@ function App() {
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => openAdd('expense')}
-            className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--line)] bg-[var(--surface-3)] py-7 transition-transform active:scale-95"
+            className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-highest)] py-7 transition-transform active:scale-95"
           >
             <span
               className="flex h-12 w-12 items-center justify-center rounded-2xl text-white"
-              style={{ background: 'var(--color-saffron)' }}
+              style={{ background: 'var(--md-sys-color-primary)' }}
             >
               <Wallet size={22} />
             </span>
             <span className="text-[13.5px] font-bold">Expense</span>
-            <span className="text-[11px] text-[var(--fg-subtle)]">Money out</span>
+            <span className="text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Money out</span>
           </button>
           <button
             onClick={() => openAdd('income')}
-            className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--line)] bg-[var(--surface-3)] py-7 transition-transform active:scale-95"
+            className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-highest)] py-7 transition-transform active:scale-95"
           >
             <span
               className="flex h-12 w-12 items-center justify-center rounded-2xl text-white"
-              style={{ background: 'var(--color-mint)' }}
+              style={{ background: 'var(--tone-good)' }}
             >
               <BarChart3 size={22} />
             </span>
             <span className="text-[13.5px] font-bold">Income</span>
-            <span className="text-[11px] text-[var(--fg-subtle)]">Money in</span>
+            <span className="text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Money in</span>
           </button>
         </div>
       </Sheet>
@@ -247,7 +241,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
       {/* budget */}
       <section className="card p-4">
         <div className="mb-1 text-[13.5px] font-bold">Monthly spending budget</div>
-        <p className="mb-3 text-[12px] leading-relaxed text-[var(--fg-muted)]">
+        <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           Powers the safe-to-spend figure, the burn-rate ring and the runway insight.
         </p>
         <div className="flex gap-2">
@@ -279,9 +273,9 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
                 }}
                 className="chip transition-colors"
                 style={{
-                  background: on ? 'var(--color-saffron)' : 'var(--surface-3)',
-                  color: on ? '#fff' : 'var(--fg-muted)',
-                  borderColor: on ? 'transparent' : 'var(--line)',
+                  background: on ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-surface-container-highest)',
+                  color: on ? 'var(--md-sys-color-on-primary)' : 'var(--md-sys-color-on-surface-variant)',
+                  borderColor: on ? 'transparent' : 'var(--md-sys-color-outline-variant)',
                 }}
               >
                 {symbolFor(c)}
@@ -306,9 +300,9 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
                 }}
                 className="rounded-xl border py-2.5 text-[12.5px] font-bold capitalize transition-all"
                 style={{
-                  borderColor: on ? 'var(--color-saffron)' : 'var(--line)',
-                  background: on ? 'color-mix(in oklab, var(--color-saffron) 12%, transparent)' : 'var(--surface-3)',
-                  color: on ? 'var(--color-saffron)' : 'var(--fg-muted)',
+                  borderColor: on ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-outline-variant)',
+                  background: on ? 'color-mix(in oklab, var(--md-sys-color-primary) 12%, transparent)' : 'var(--md-sys-color-surface-container-highest)',
+                  color: on ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface-variant)',
                 }}
               >
                 {t}
@@ -316,7 +310,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
             )
           })}
         </div>
-        <div className="mt-2 text-[11px] text-[var(--fg-subtle)]">Currently showing: {mode} mode</div>
+        <div className="mt-2 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Currently showing: {mode} mode</div>
       </section>
 
       {/* categories */}
@@ -325,7 +319,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
           <div className="text-[13.5px] font-bold">Categories</div>
           <button
             onClick={() => setShowCats((v) => !v)}
-            className="text-[11.5px] font-bold text-[var(--color-saffron)]"
+            className="text-[11.5px] font-bold text-[var(--md-sys-color-primary)]"
           >
             {showCats ? 'Hide' : `Show all (${categories.length})`}
           </button>
@@ -353,7 +347,7 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
       {/* backup shortcut */}
       <section className="card p-4">
         <div className="mb-1 text-[13.5px] font-bold">Backups & data</div>
-        <p className="mb-3 text-[12px] leading-relaxed text-[var(--fg-muted)]">
+        <p className="mb-3 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           Connect Google Drive, restore a snapshot, or export/import CSV.
         </p>
         <button className="btn btn-outline w-full" onClick={() => onNavigate('backup')}>
@@ -364,12 +358,12 @@ function SettingsPanel({ onNavigate }: { onNavigate: (t: Tab) => void }) {
       {/* about */}
       <section className="card p-4">
         <div className="mb-2 text-[13.5px] font-bold">About Khata</div>
-        <ul className="space-y-1.5 text-[12px] leading-relaxed text-[var(--fg-muted)]">
+        <ul className="space-y-1.5 text-[12px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
           <li>· All data lives on this device (IndexedDB). No server, no account.</li>
           <li>· Works fully offline; install it to your home screen.</li>
           <li>· Backups are AES-256-GCM encrypted before upload to Drive.</li>
         </ul>
-        <div className="mt-3 text-[11px] text-[var(--fg-subtle)]">v1.0.0 · local-first budget tracker</div>
+        <div className="mt-3 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">v1.0.0 · local-first budget tracker</div>
       </section>
     </div>
   )

@@ -1,0 +1,42 @@
+/* ==========================================================================
+   Semantic bridge.
+
+   The app's domain vocabulary (good / warn / bad / info) is expressed in
+   Material's extended roles rather than raw brand hexes, so every surface
+   stays contrast-correct in both light and dark without a second palette.
+   ========================================================================== */
+
+:root {
+  /* Semantic aliases used across views/charts. */
+  --tone-good: var(--md-sys-color-success);
+  --tone-good-container: var(--md-sys-color-success-container);
+  --tone-good-on-container: var(--md-sys-color-on-success-container);
+
+  --tone-warn: var(--md-sys-color-warning);
+  --tone-warn-container: var(--md-sys-color-warning-container);
+  --tone-warn-on-container: var(--md-sys-color-on-warning-container);
+
+  --tone-bad: var(--md-sys-color-error);
+  --tone-bad-container: var(--md-sys-color-error-container);
+  --tone-bad-on-container: var(--md-sys-color-on-error-container);
+
+  --tone-info: var(--md-sys-color-tertiary);
+  --tone-info-container: var(--md-sys-color-tertiary-container);
+  --tone-info-on-container: var(--md-sys-color-on-tertiary-container);
+
+  --tone-accent: var(--md-sys-color-primary);
+  --tone-accent-container: var(--md-sys-color-primary-container);
+  --tone-accent-on-container: var(--md-sys-color-on-primary-container);
+
+  /* Chart-specific tokens: series need more chroma than UI text does. */
+  --chart-1: var(--md-sys-color-primary);
+  --chart-2: var(--md-sys-color-tertiary);
+  --chart-3: var(--md-sys-color-cat-slate-blue-solid);
+  --chart-4: var(--md-sys-color-cat-amber-solid);
+  --chart-5: var(--md-sys-color-cat-mint-solid);
+  --chart-6: var(--md-sys-color-cat-violet-solid);
+  --chart-7: var(--md-sys-color-cat-teal-solid);
+  --chart-8: var(--md-sys-color-cat-clay-solid);
+  --chart-grid: var(--md-sys-color-outline-variant);
+  --chart-track: var(--md-sys-color-surface-container-highest);
+}

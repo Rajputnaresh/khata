@@ -191,8 +191,8 @@ export function TxEditor({
       footer={
         <div className="flex gap-2">
           {editing && (
-            <button className="btn btn-ghost px-3" onClick={remove} aria-label="Delete">
-              <Trash2 size={17} style={{ color: 'var(--color-clay)' }} />
+            <button className="btn btn-tonal px-3" onClick={remove} aria-label="Delete">
+              <Trash2 size={17} style={{ color: 'var(--tone-bad)' }} />
             </button>
           )}
           <button className="btn btn-primary flex-1 py-3 text-[15px]" onClick={save} disabled={!valid || saving}>
@@ -202,8 +202,11 @@ export function TxEditor({
       }
     >
       <div className="space-y-5">
-        {/* type toggle */}
-        <div className="grid grid-cols-2 gap-1.5 rounded-2xl bg-[var(--surface-3)] p-1">
+        {/* type toggle — Material 3 segmented button */}
+        <div
+          className="grid grid-cols-2 gap-1 p-1"
+          style={{ background: 'var(--md-sys-color-surface-container-highest)', borderRadius: 'var(--radius-full)' }}
+        >
           {(['expense', 'income'] as const).map((t) => {
             const on = draft.type === t
             const isExpense = t === 'expense'
@@ -211,16 +214,21 @@ export function TxEditor({
               <button
                 key={t}
                 onClick={() => flip(t)}
-                className="rounded-xl py-2.5 text-[13.5px] font-bold capitalize transition-all duration-200"
-                style={
-                  on
-                    ? {
-                        background: isExpense ? 'var(--color-saffron)' : 'var(--color-mint)',
-                        color: '#fff',
-                        boxShadow: '0 2px 10px -2px rgb(0 0 0 / 0.3)',
-                      }
-                    : { color: 'var(--fg-muted)' }
-                }
+                className="py-2.5 label-lg capitalize transition-all"
+                style={{
+                  background: on
+                    ? isExpense
+                      ? 'var(--md-sys-color-primary)'
+                      : 'var(--md-sys-color-success)'
+                    : 'transparent',
+                  color: on
+                    ? isExpense
+                      ? 'var(--md-sys-color-on-primary)'
+                      : 'var(--md-sys-color-on-success)'
+                    : 'var(--md-sys-color-on-surface-variant)',
+                  boxShadow: on ? 'var(--md-sys-elevation-level1)' : 'none',
+                  borderRadius: 'var(--radius-full)',
+                }}
               >
                 {t}
               </button>
@@ -230,11 +238,11 @@ export function TxEditor({
 
         {/* amount */}
         <div className="text-center">
-          <div className="mb-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--fg-subtle)]">
+          <div className="mb-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--md-sys-color-on-surface-variant)]">
             Amount
           </div>
           <div className="flex items-center justify-center gap-1.5">
-            <span className="text-[26px] font-medium text-[var(--fg-subtle)]">{symbol}</span>
+            <span className="text-[26px] font-medium text-[var(--md-sys-color-on-surface-variant)]">{symbol}</span>
             <input
               ref={amountRef}
               inputMode="decimal"
@@ -243,18 +251,18 @@ export function TxEditor({
               onChange={(e) => setDraft({ ...draft, amount: e.target.value })}
               placeholder="0"
               aria-label="Amount"
-              className="tnum w-full max-w-[220px] bg-transparent text-center text-[40px] font-bold tracking-tight outline-none placeholder:text-[var(--line-strong)]"
-              style={{ color: draft.type === 'expense' ? 'var(--fg)' : 'var(--color-mint)' }}
+              className="tnum w-full max-w-[220px] bg-transparent text-center text-[40px] font-bold tracking-tight outline-none placeholder:text-[var(--md-sys-color-outline)]"
+              style={{ color: draft.type === 'expense' ? 'var(--md-sys-color-on-surface)' : 'var(--tone-good)' }}
             />
           </div>
           {paise !== null && paise > 0 && (
-            <div className="mt-1 text-[11px] font-medium text-[var(--fg-subtle)]">
+            <div className="mt-1 text-[11px] font-medium text-[var(--md-sys-color-on-surface-variant)]">
               {draft.type === 'expense' ? 'Spent' : 'Received'}
             </div>
           )}
         </div>
 
-        {/* categories */}
+        {/* categories — Material 3 icon+label grid, selection via container role */}
         <div>
           <div className="label mb-2">Category</div>
           <div className="grid grid-cols-4 gap-1.5 sm:grid-cols-5">
@@ -264,25 +272,30 @@ export function TxEditor({
                 <button
                   key={c.id}
                   onClick={() => setDraft({ ...draft, categoryId: c.id })}
-                  className="flex flex-col items-center gap-1 rounded-xl px-1 py-2 transition-all duration-200"
+                  className="flex flex-col items-center gap-1 px-1 py-2 transition-all"
                   style={{
-                    background: on ? `color-mix(in oklab, ${c.color} 16%, transparent)` : 'transparent',
-                    boxShadow: on ? `inset 0 0 0 1.5px ${c.color}` : 'none',
+                    background: on
+                      ? `color-mix(in oklab, ${c.color} 18%, var(--md-sys-color-surface))`
+                      : 'transparent',
+                    borderRadius: 'var(--radius-md)',
+                    boxShadow: on ? `inset 0 0 0 2px ${c.color}` : 'none',
                   }}
+                  aria-pressed={on}
                 >
                   <span
-                    className="flex h-8 w-8 items-center justify-center rounded-lg transition-transform"
+                    className="flex h-8 w-8 items-center justify-center transition-transform"
                     style={{
-                      background: on ? c.color : `color-mix(in oklab, ${c.color} 15%, transparent)`,
-                      color: on ? '#fff' : c.color,
+                      background: on ? c.color : `color-mix(in oklab, ${c.color} 16%, transparent)`,
+                      color: on ? 'var(--md-sys-color-on-primary)' : c.color,
+                      borderRadius: 'var(--radius-full)',
                       transform: on ? 'scale(1.05)' : 'none',
                     }}
                   >
                     <CategoryIcon name={c.icon} className="h-4 w-4" />
                   </span>
                   <span
-                    className="w-full truncate text-center text-[9.5px] font-semibold leading-tight"
-                    style={{ color: on ? 'var(--fg)' : 'var(--fg-subtle)' }}
+                    className="w-full truncate text-center text-[10px] font-medium leading-tight"
+                    style={{ color: on ? 'var(--md-sys-color-on-surface)' : 'var(--md-sys-color-on-surface-variant)' }}
                   >
                     {c.name}
                   </span>
@@ -295,7 +308,7 @@ export function TxEditor({
         {/* note */}
         <div>
           <label className="label mb-1.5 block" htmlFor="tx-note">
-            Note <span className="font-normal normal-case tracking-normal text-[var(--fg-subtle)]">(optional)</span>
+            Note <span className="font-normal normal-case tracking-normal text-[var(--md-sys-color-on-surface-variant)]">(optional)</span>
           </label>
           <input
             id="tx-note"
@@ -313,7 +326,7 @@ export function TxEditor({
               <button
                 key={s}
                 onClick={() => setDraft({ ...draft, note: s })}
-                className="chip text-[11px] text-[var(--fg-muted)] hover:bg-[var(--surface-3)]"
+                className="chip text-[11px] text-[var(--md-sys-color-on-surface-variant)] hover:bg-[var(--md-sys-color-surface-container-highest)]"
               >
                 <Sparkles size={10} />
                 {s}
@@ -344,11 +357,11 @@ export function TxEditor({
                 onClick={() => setDraft({ ...draft, recurring: !draft.recurring })}
                 className="flex h-[42px] flex-1 items-center justify-center gap-1.5 rounded-xl border text-[11px] font-bold transition-all"
                 style={{
-                  borderColor: draft.recurring ? 'var(--color-saffron)' : 'var(--line)',
+                  borderColor: draft.recurring ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-outline-variant)',
                   background: draft.recurring
-                    ? 'color-mix(in oklab, var(--color-saffron) 14%, transparent)'
-                    : 'var(--surface-3)',
-                  color: draft.recurring ? 'var(--color-saffron)' : 'var(--fg-muted)',
+                    ? 'color-mix(in oklab, var(--md-sys-color-primary) 14%, transparent)'
+                    : 'var(--md-sys-color-surface-container-highest)',
+                  color: draft.recurring ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface-variant)',
                 }}
                 aria-pressed={draft.recurring}
               >
@@ -361,12 +374,12 @@ export function TxEditor({
                 }
                 className="flex h-[42px] flex-1 items-center justify-center gap-1.5 rounded-xl border text-[11px] font-bold transition-all"
                 style={{
-                  borderColor: draft.status === 'pending' ? 'var(--color-amber)' : 'var(--line)',
+                  borderColor: draft.status === 'pending' ? 'var(--tone-warn)' : 'var(--md-sys-color-outline-variant)',
                   background:
                     draft.status === 'pending'
-                      ? 'color-mix(in oklab, var(--color-amber) 16%, transparent)'
-                      : 'var(--surface-3)',
-                  color: draft.status === 'pending' ? 'var(--color-amber)' : 'var(--fg-muted)',
+                      ? 'color-mix(in oklab, var(--tone-warn) 16%, transparent)'
+                      : 'var(--md-sys-color-surface-container-highest)',
+                  color: draft.status === 'pending' ? 'var(--tone-warn)' : 'var(--md-sys-color-on-surface-variant)',
                 }}
                 aria-pressed={draft.status === 'pending'}
               >

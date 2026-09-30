@@ -50,19 +50,19 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
       <div className="flex items-center justify-between">
         <button
           onClick={goPrev}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--surface-3)]"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--md-sys-color-surface-container-highest)]"
           aria-label="Previous month"
         >
           <ChevronLeft size={17} />
         </button>
         <div className="text-center">
           <div className="text-[15px] font-bold tracking-tight">{monthLabel(`${month}-01`)}</div>
-          {!isCurrent && <div className="text-[11px] text-[var(--fg-subtle)]">history</div>}
+          {!isCurrent && <div className="text-[11px] text-[var(--md-sys-color-on-surface-variant)]">history</div>}
         </div>
         <button
           onClick={goNext}
           disabled={isCurrent}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--surface-3)] disabled:opacity-30"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--md-sys-color-surface-container-highest)] disabled:opacity-30"
           aria-label="Next month"
         >
           <ChevronRight size={17} />
@@ -107,7 +107,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
       {a.totals.expense > 0 && (
         <section className="card p-4">
           <div className="mb-1 text-[13.5px] font-bold">Daily rhythm</div>
-          <div className="mb-3 text-[11px] text-[var(--fg-subtle)]">
+          <div className="mb-3 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">
             Spending across the month in six buckets
           </div>
           <BarChart data={daily} currency={cur} />
@@ -119,7 +119,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
         <section className="card p-4">
           <div className="mb-3 flex items-center justify-between">
             <div className="text-[13.5px] font-bold">Category breakdown</div>
-            <span className="tnum text-[11px] text-[var(--fg-subtle)]">
+            <span className="tnum text-[11px] text-[var(--md-sys-color-on-surface-variant)]">
               {a.topCategories.reduce((s, x) => s + x.count, 0)} entries
             </span>
           </div>
@@ -140,13 +140,13 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
 
       <section className="card p-4">
         <div className="mb-1 text-[13.5px] font-bold">Spending trajectory</div>
-        <div className="mb-3 text-[11px] text-[var(--fg-subtle)]">Smoothed 12-month expense line</div>
+        <div className="mb-3 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Smoothed 12-month expense line</div>
         <AreaTrend data={trend} currency={cur} height={130} />
       </section>
 
       <section className="card p-4">
         <div className="mb-1 text-[13.5px] font-bold">Income trajectory</div>
-        <div className="mb-3 text-[11px] text-[var(--fg-subtle)]">Smoothed 12-month income line</div>
+        <div className="mb-3 text-[11px] text-[var(--md-sys-color-on-surface-variant)]">Smoothed 12-month income line</div>
         <AreaTrend data={incomeTrend} currency={cur} height={130} />
       </section>
 
@@ -154,7 +154,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
       <section className="card p-4">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-1.5 text-[13.5px] font-bold">
-            <Brain size={15} style={{ color: 'var(--color-saffron)' }} />
+            <Brain size={15} style={{ color: 'var(--md-sys-color-primary)' }} />
             All insights
           </div>
           <div className="flex gap-1">
@@ -163,7 +163,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
                 key={s}
                 onClick={() => setSeverity(s)}
                 className={`rounded-lg px-2 py-1 text-[10.5px] font-bold transition-colors ${
-                  severity === s ? 'bg-[var(--color-saffron)] text-white' : 'bg-[var(--surface-3)] text-[var(--fg-muted)]'
+                  severity === s ? 'bg-[var(--md-sys-color-primary)] text-white' : 'bg-[var(--md-sys-color-surface-container-highest)] text-[var(--md-sys-color-on-surface-variant)]'
                 }`}
               >
                 {s === 'all' ? 'All' : 'Needs action'}
@@ -177,9 +177,9 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
           ))}
           {shownInsights.length === 0 && (
             <div className="flex flex-col items-center py-8 text-center">
-              <Zap size={22} className="mb-2 text-[var(--color-mint)]" />
+              <Zap size={22} className="mb-2 text-[var(--tone-good)]" />
               <p className="text-[13px] font-semibold">Nothing needs your attention</p>
-              <p className="mt-1 text-[12px] text-[var(--fg-subtle)]">
+              <p className="mt-1 text-[12px] text-[var(--md-sys-color-on-surface-variant)]">
                 No budget breaches or spikes this month.
               </p>
             </div>
@@ -190,20 +190,20 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
       {a.anomalies.length > 0 && (
         <section className="card p-4">
           <div className="mb-2.5 flex items-center gap-1.5 text-[13.5px] font-bold">
-            <AlertTriangle size={15} style={{ color: 'var(--color-amber)' }} />
+            <AlertTriangle size={15} style={{ color: 'var(--tone-warn)' }} />
             Spikes to review
           </div>
           <div className="space-y-1.5">
             {a.anomalies.slice(0, 5).map((t) => (
               <div
                 key={t.id}
-                className="flex items-center justify-between gap-3 rounded-lg bg-[var(--surface-3)] px-3 py-2"
+                className="flex items-center justify-between gap-3 rounded-lg bg-[var(--md-sys-color-surface-container-highest)] px-3 py-2"
               >
                 <div className="min-w-0">
                   <div className="truncate text-[12.5px] font-semibold">{t.note || 'Entry'}</div>
-                  <div className="text-[11px] text-[var(--fg-subtle)]">{t.date}</div>
+                  <div className="text-[11px] text-[var(--md-sys-color-on-surface-variant)]">{t.date}</div>
                 </div>
-                <span className="tnum text-[13px] font-bold" style={{ color: 'var(--color-amber)' }}>
+                <span className="tnum text-[13px] font-bold" style={{ color: 'var(--tone-warn)' }}>
                   {money(t.amount, cur, 0)}
                 </span>
               </div>
@@ -212,7 +212,7 @@ export function InsightsView({ onJumpCategory }: { onJumpCategory: (id: string) 
         </section>
       )}
 
-      <div className="flex items-start gap-2 px-1 pb-2 text-[11px] leading-relaxed text-[var(--fg-subtle)]">
+      <div className="flex items-start gap-2 px-1 pb-2 text-[11px] leading-relaxed text-[var(--md-sys-color-on-surface-variant)]">
         <Info size={13} className="mt-0.5 shrink-0" />
         <span>Insights are computed privately on this device from your own entries. Nothing is sent anywhere.</span>
       </div>
