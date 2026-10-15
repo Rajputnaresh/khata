@@ -204,32 +204,61 @@ def main() -> None:
 
     # ---- adaptive icon layers -------------------------------------------
     # Android renders an adaptive icon on a 108dp canvas but only guarantees the
-    # central 72dp survives every OEM mask (66dp for aggressive circles). The
-    # glyph is scaled to 60dp and centred, which keeps it clear of the worst-case
-    # mask while still filling the icon generously.
+    # central 72dp survives every OEM mask (66dp for aggressive circles).
     CANVAS = 432  # 108dp at 4x
 
+    # Scale by the GLYPH's own bounding box, not the source canvas. The glyph
+    # occupies only ~52-65% of the 512px source image, so scaling the canvas to
+    # 60dp shrinks the logo to ~35dp and it vanishes on the launcher. Crop to
+    # the alpha's bbox first, then fit that to the safe zone, so the *mark* -- not
+    # its surrounding padding -- is what fills the icon.
+    ys, xs = np.nonzero(alpha > 0.5)
+    if len(xs) == 0:
+        raise SystemExit("glyph extraction produced an empty mask")
+    gx0, gx1, gy0, gy1 = xs.min(), xs.max() + 1, ys.min(), ys.max() + 1
+    glyph_rgb = fg_rgb[gy0:gy1, gx0:gx1]
+    glyph_a = alpha[gy0:gy1, gx0:gx1]
+    # Make the crop square about the glyph's centre so it is not stretched.
+    gh, gw = glyph_a.shape[:2]
+    side = max(gh, gw)
+    pad_t, pad_l = (side - gh) // 2, (side - gw) // 2
+    sq_rgb = np.zeros((side, side, 3), np.float32)
+    sq_a = np.zeros((side, side), np.float32)
+    sq_rgb[pad_t : pad_t + gh, pad_l : pad_l + gw] = glyph_rgb
+    sq_a[pad_t : pad_t + gh, pad_l : pad_l + gw] = glyph_a
+    print(f"  glyph bbox {gw}x{gh} in {tile.shape[1]}x{tile.shape[0]} tile -> square {side}px")
+
     def place_fg(size: int) -> np.ndarray:
-        """Rescale the glyph into the safe zone of a `size` canvas."""
+        """Fit the glyph into the safe zone of a `size` canvas."""
         canvas = np.zeros((size, size, 4), np.uint8)
-        s = int(size * 0.555)
-        a = cv2.resize(alpha, (s, s), interpolation=cv2.INTER_LANCZOS4)
-        f = cv2.resize(fg_rgb, (s, s), interpolation=cv2.INTER_LANCZOS4)
+        s = int(size * 0.60)  # 60dp of 108dp: clear of the 66dp worst-case mask
+        a = cv2.resize(sq_a, (s, s), interpolation=cv2.INTER_LANCZOS4)
+        f = cv2.resize(sq_rgb, (s, s), interpolation=cv2.INTER_LANCZOS4)
         o = (size - s) // 2
         canvas[o : o + s, o : o + s, :3] = f.astype(np.uint8)
         canvas[o : o + s, o : o + s, 3] = np.clip(a * 255, 0, 255).astype(np.uint8)
         return canvas
 
+    fore = place_fg(CANVAS)
     adir = args.res / "mipmap-anydpi-v26"
     adir.mkdir(parents=True, exist_ok=True)
-    _write(adir / "ic_launcher_foreground.png", place_fg(CANVAS))
+    _write(adir / "ic_launcher_foreground.png", fore)
     # Themed-icon (Android 13+) layer: the launcher tints this itself, so it must
     # be a flat white silhouette of the glyph, not the artwork. Flat white with
     # the glyph's own alpha -- the launcher supplies the colour.
     mono = np.zeros((CANVAS, CANVAS, 4), np.uint8)
     mono[..., :3] = 255
-    mono[..., 3] = place_fg(CANVAS)[..., 3]
+    mono[..., 3] = fore[..., 3]
     _write(adir / "ic_launcher_monochrome.png", mono)
+    # Sanity check: the mark should now fill a healthy share of the canvas.
+    cov = float((fore[..., 3] > 128).mean())
+    bbox = fore[..., 3] > 128
+    bx = np.nonzero(bbox.any(axis=0))[0]
+    by = np.nonzero(bbox.any(axis=1))[0]
+    span = max(bx.max() - bx.min(), by.max() - by.min()) if len(bx) else 0
+    print(f"  adaptive foreground {CANVAS}px: glyph {span}px wide ({span / CANVAS * 100:.0f}% of canvas), alpha {cov * 100:.1f}%")
+    if span / CANVAS < 0.5:
+        raise SystemExit(f"glyph only spans {span / CANVAS * 100:.0f}% of the icon canvas; it would be invisible on the launcher")
     # Backgrounds at every density so non-adaptive and pre-26 renderers still
     # get a full-bleed gradient rather than a transparent square.
     for density, px in (("mdpi", 108), ("hdpi", 162), ("xhdpi", 216), ("xxhdpi", 324), ("xxxhdpi", 432)):
@@ -247,10 +276,13 @@ def main() -> None:
 
     if args.preview:
         s = 256
-        a = cv2.resize(alpha, (s, s), interpolation=cv2.INTER_LANCZOS4)
-        f = cv2.resize(fg_rgb, (s, s), interpolation=cv2.INTER_LANCZOS4)
+        # Composite the ACTUAL shipped foreground layer (same 60dp safe-zone
+        # placement aapt2 will package), not a full-canvas glyph, so the preview
+        # shows what the launcher will really show.
+        fa = cv2.resize(fore[..., 3], (s, s), interpolation=cv2.INTER_AREA)[..., None] / 255.0
+        fr = cv2.resize(fore[..., :3], (s, s), interpolation=cv2.INTER_AREA)
         b = cv2.resize(bg, (s, s), interpolation=cv2.INTER_AREA)
-        composed = np.clip(f * a[..., None] + b * (1 - a[..., None]), 0, 255)
+        composed = np.clip(fr * fa + b * (1 - fa), 0, 255)
 
         def mask_panel(mask2d: np.ndarray) -> np.ndarray:
             m = mask2d[..., None].astype(np.float32)
